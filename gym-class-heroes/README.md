@@ -1,73 +1,31 @@
-# React + TypeScript + Vite
+# Gym Class Heroes
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Team Members
 
-Currently, two official plugins are available:
+-   Nikita Kurakin
+-   Hoang Son Nguyen
+-   Faith Hilarde
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+_**Team Name**_: Group 1
 
-## React Compiler
+## Project Description
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This project is a multi-page workout management system built with React
+and TypeScript. The system is designed for two types of users: **coaches**
+and **athletes**. Coaches can create, read, update and delete workouts for
+their athletes, while athletes can view and update their assigned
+workouts by ID.
 
-## Expanding the ESLint configuration
+As the course progresses, the application will expand from simple static
+front-end into a fully integrated system. By the end of the term, the
+project will function as a complete workout management platform with
+persistend data, user-specific content, and production ready deployment.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### User Stories
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+-   _As a coach, I want to create workouts for my athletes so I can plan
+    their training._
+-   _As an athlete, I want to view the workouts assigned to me so that I
+    know what I need to do._
+-   _As a user, I want the app to be easy to navigate so that I can find
+    what I need quickly._
