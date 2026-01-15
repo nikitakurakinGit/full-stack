@@ -1,11 +1,12 @@
 import './App.css'
+import Coaches from './components/coaches/coaches';
 import Footer from './components/footer/footer';
 import {Header} from './components/header/header';
 import WorkoutList from './components/workouts/workouts';
 
 function App() {
   return (
-    <div>
+    <div className='bg-[#bcc8d0]'>
       <Header
         projectName="Gym Class Heroes"
         projectDescription="Workout Management System"
@@ -26,6 +27,24 @@ function App() {
         workouts={["150 Push-ups", "150 Squats", "150 Sit-ups"]}
       />
      
+      <Coaches
+        name="Coach A"
+        title="Head Coach"
+        athletes={["Nikita", "Sonny"]}
+      />
+
+      <Coaches
+        name="Coach B"
+        title="Coach"
+        athletes={["KJ", "Faith", "Zach"]}
+      />
+
+      <Coaches
+        name="Coach C"
+        title="Coach"
+        athletes={["Kirby", "Ken", "Cole", "Steve"]}
+      />
+
       <Footer names={["Faith Hilarde","Nikita Kurakin", "Hoang Son Nguyen"]} />
             
     </div>
