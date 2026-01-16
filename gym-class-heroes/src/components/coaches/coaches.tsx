@@ -1,13 +1,15 @@
+import type { CoachModel } from "../interface/coaches";
 
-
-function Coaches({name, title, athletes}: {name: string, title: string, athletes: string[]}) {
+function Coaches({id, name, title, athletes}: CoachModel) {
     return (
-        <section className="w-auto bg-[#bcc8d0] text-[#0c0e0e] px-6 py-4">
+        <section className="bg-[#bcc8d0] text-[#0c0e0e] px-6 py-4">
             <div>
-                <h4 className="text-lg font-semibold">{name}: </h4>
-                <h5 className="text-m font-medium mb-2">{title}</h5>
-                {athletes.map((athlete, index) => (
-                    <h6 key={index} className="text-base text-[#3e4447] italic">{athlete}</h6>
+                <div className="flex items-baseline gap-2">
+                    <h4 className="text-lg font-semibold drop-shadow">{name}: </h4>
+                    <span className="text-m font-medium mb-2">{title}</span>
+                </div>
+                {athletes.map((athlete) => (
+                    <h6 key={id} className="text-base text-[#3e4447] italic">{athlete}</h6>
                 ))}
             </div>
         </section>
