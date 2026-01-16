@@ -1,17 +1,27 @@
 import './App.css'
+import {Header} from './components/header/header';
+import { AthleteList } from './components/athletes/athletes';
+import type { Athletes } from './components/interface/athletes';
+import WorkoutList from './components/workouts/workouts';
 import Coaches from './components/coaches/coaches';
 import Footer from './components/footer/footer';
-import {Header} from './components/header/header';
-import WorkoutList from './components/workouts/workouts';
+import Footer from './components/footer/footer';
+
 
 function App() {
-  return (
+  const athlete: Athletes[] = [
+    { id: 1, name: "Hoang Son Nguyen", sport: "Soccer", experience: "Advanced", status: "Active" },
+    { id: 2, name: "Nikita Kurakin", sport: "Basketball", experience: "Intermediate", status: "Inactive" },
+    { id: 3, name: "Faith Hilarde", sport: "Wrestling", experience: "Beginner", status: "Injured" }
+  ]
+
+  return (  
     <div className='bg-[#bcc8d0]'>
       <Header
         projectName="Gym Class Heroes"
         projectDescription="Workout Management System"
       />
-      
+      <AthleteList title="Athletes" athlete={athlete} />
       <WorkoutList 
         title="Beginner Level"
         workouts={["50 Push-ups", "50 Squats", "50 Sit-ups"]}
@@ -44,9 +54,7 @@ function App() {
         title="Coach"
         athletes={["Kirby", "Ken", "Cole", "Steve"]}
       />
-
-      <Footer names={["Faith Hilarde","Nikita Kurakin", "Hoang Son Nguyen"]} />
-            
+      <Footer names={["Faith Hilarde","Nikita Kurakin", "Hoang Son Nguyen"]} />    
     </div>
   );
 }
