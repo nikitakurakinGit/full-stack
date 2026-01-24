@@ -1,4 +1,4 @@
-export interface CoachModel {
+export interface CoachInterface {
     id: number;
     name: string;
     title: string;
