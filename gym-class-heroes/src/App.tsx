@@ -6,6 +6,7 @@ import CoachesPage from './pages/CoachesPage';
 import { Layout } from './components/layout/layout';
 import { athleteData } from './data/athleteData';
 import { coachData } from './data/coachData';
+import { workoutData } from './data/workoutData';
 
 function App() {
   return (  
@@ -21,8 +22,8 @@ function App() {
               path='workouts'
               element={
                 <WorkoutsPage
-                  title="Beginner Level"
-                  workouts={["50 Push-ups", "50 Squats", "50 Sit-ups"]}/>}/>
+                  title="Workouts"
+                  workouts={workoutData}/>}/>
             
             <Route
                 path='coaches'
