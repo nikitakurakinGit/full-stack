@@ -1,4 +1,4 @@
-import './App.css'
+import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import AthletesPage from './pages/AthletesPage';
 import WorkoutsPage from "./pages/WorkoutsPage";
@@ -6,7 +6,6 @@ import CoachesPage from './pages/CoachesPage';
 import { Layout } from './components/layout/layout';
 import { athleteData } from './data/athleteData';
 import { coachData } from './data/coachData';
-import { workoutData } from './data/workoutData';
 
 function App() {
   return (  
@@ -21,9 +20,8 @@ function App() {
             <Route
               path='workouts'
               element={
-                <WorkoutsPage
-                  title="Workouts"
-                  workouts={workoutData}/>}/>
+                <WorkoutsPage/>}
+                />
             
             <Route
                 path='coaches'
