@@ -3,20 +3,20 @@ import type { CoachInterface } from '../components/interface/coachesInterface';
 export const coachData: CoachInterface[] = [
     {
         id: 1,
-        name: "Coach A",
+        name: "Kevin Cosmo",
         title: "Head Coach",
-        athletes: ["Nikita", "Sonny"],
+        group: "A"
       },
       {
         id: 2,
-        name: "Coach B",
+        name: "Max Ruby",
         title: "Coach",
-        athletes: ["KJ", "Faith", "Zach"],
+        group: "B"
       },
       {
         id: 3,
-        name: "Coach C",
+        name: "Rolli Polli",
         title: "Coach",
-        athletes: ["Kirby", "Ken", "Cole", "Steve"],
+        group: "C"
       }
 ]
