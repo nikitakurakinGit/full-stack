@@ -1,11 +1,12 @@
 import type { CoachInterface } from "../interface/coachesInterface";
 
 type CoachesProps = {
-        onRemoveCoach: (coachId: number) => void;
+        onRemoveCoach: (coach: CoachInterface) => void;
         coaches: CoachInterface[];
     }
 
 function Coaches({ coaches, onRemoveCoach }: CoachesProps) {
+
     return (
         <section className="flex flex-wrap justify-center bg-[#bcc8d0] text-[#0c0e0e] px-6 py-4 gap-20 w-full max-w-xl mx-auto border-2 rounded">
             {coaches.map((coach) => (
@@ -17,7 +18,7 @@ function Coaches({ coaches, onRemoveCoach }: CoachesProps) {
                     </div>
                     <button
                         type="button"
-                        onClick={() => onRemoveCoach(coach.id)}
+                        onClick={() => onRemoveCoach(coach)}
                         className="border border-black rounded py-2 px-3
                         bg-white hover:bg-gray-100 active:scale-95
                         transition">Remove</button>
