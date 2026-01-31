@@ -1,5 +1,5 @@
 import './App.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AthletesPage from './pages/AthletesPage';
 import WorkoutsPage from "./pages/WorkoutsPage";
@@ -8,17 +8,21 @@ import { Layout } from './components/layout/layout';
 import { athleteData } from './data/athleteData';
 import { groupData } from './data/groupsData';
 import type { GroupsInterface } from './components/interface/groupsInterface';
+import type { GroupArrayKey } from './components/interface/groupArrayKey';
 
 function App() {
   const [groupsData, setGroupsData] = useState<GroupsInterface[]>(groupData)
-  
-  type GroupArrayKey = "coachesById" | "workoutsById" | "athletesById"
+
+  //This is only here for debugging and sanity check puposes. When you update your pages to take the add and remove from group functions. Check your console when you add and remove athletes or workout to make sure everything is working as exepcted.
+  useEffect(() => {
+    console.log(groupsData)
+  }, [groupsData])
 
   //This function will take the id of the group we intent to update. The key is hardcoded above and will be passed. This will help us avoid writing 3 add functions, one for each set of data. The subjectID is the id of the coach, workout or athlete being added. We then map over the group, if the group.id matches the passed id. We spread the group, then we update the passed key. For example [coachesById]: [...group[coachesById], newCoachId].
   const addToGroup = (
     groupId: string,
     key: GroupArrayKey,
-    subjectId: string
+    subjectId: number
   ) => {
     setGroupsData(prev => 
       prev.map(group =>
@@ -35,7 +39,7 @@ function App() {
   const removeFromGroup = (
     groupId: string,
     key: GroupArrayKey,
-    subjectId: string
+    subjectId: number
   ) => {
     setGroupsData(prev => 
       prev.map(group =>
@@ -65,7 +69,7 @@ function App() {
             
             <Route
                 path='coaches'
-                element={<CoachesPage/>}
+                element={<CoachesPage addToGroup={addToGroup} removeFromGroup={removeFromGroup}/>}
                 />
         </Route>
       </Routes>
