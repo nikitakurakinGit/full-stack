@@ -8,13 +8,13 @@ type workoutFormProp = {
 
 export default function WorkoutForm({ onAddWorkout }: workoutFormProp) {
     const [workout, setWorkout] = useState("");
-    const [groups, setGroups] = useState<string[]>([]);
+    const [group, setGroup] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
     function resetForm(){
         setWorkout("")
-        setGroups([])
+        setGroup("")
         setSuccess("")
         setError("")
     }
@@ -27,8 +27,8 @@ export default function WorkoutForm({ onAddWorkout }: workoutFormProp) {
             return
         }
 
-        if(groups.length === 0) {
-            setError("Select at least 1 Group");
+        if(!group) {
+            setError("Select Group");
             return;
         }
 
@@ -45,7 +45,7 @@ export default function WorkoutForm({ onAddWorkout }: workoutFormProp) {
         const newWorkout: WorkoutsInterface = {
             id: Math.floor(1000 + Math.random() * 9000),
             workout: workoutArray,            
-            groups: groups,
+            group: group,
         }
 
         onAddWorkout(newWorkout)
@@ -72,19 +72,13 @@ export default function WorkoutForm({ onAddWorkout }: workoutFormProp) {
                     />
                 </label>                
                 <label>
-                    Group: (Highlight the groups)
+                    Group:
                     <select
-                        multiple
-                        value={groups}
-                        onChange={(e) => {
-                            const selected = Array.from(
-                            e.target.selectedOptions,
-                            (option) => option.value
-                            );
-                            setGroups(selected);
-                        }}
+                        value={group}
+                        onChange={(e) => setGroup(e.target.value)}
                         className="border-2 rounded p-2 mt-1 w-full"
                         >
+                        <option>Select Group</option>
                         <option value="A">Soccer</option>
                         <option value="B">Rugby</option>
                         <option value="C">Hockey</option>

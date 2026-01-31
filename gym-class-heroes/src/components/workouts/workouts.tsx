@@ -18,7 +18,7 @@ function Workouts({ workouts, onRemoveWorkout }: WorkoutProps) {
                                 <li key={index}>{item}</li>
                             ))}
                             </ul>
-                        <span className="border text-sm font-medium mt-3 text-center text-[#0c0e0e]">Group: {workout.groups}</span>
+                        <span className="border text-sm font-medium mt-3 text-center text-[#0c0e0e]">Group: {workout.group}</span>
                     </div>
                     <button
                         type="button"
