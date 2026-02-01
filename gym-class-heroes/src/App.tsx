@@ -55,6 +55,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout/>}>
             <Route
+              index
+              element={<CoachesPage addToGroup={addToGroup} removeFromGroup={removeFromGroup}/>}
+              />
+            
+            <Route
               path='athletes'
               element={
                 <AthletesPage
