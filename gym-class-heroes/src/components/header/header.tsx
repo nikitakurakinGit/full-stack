@@ -6,11 +6,11 @@ export default function Header({
     projectDescription: string;
 }) {
     return (
-        <header className="w-auto bg-[#bcc8d0] text-[#0c0e0e] px-6 py-4 m-5">
+        <header className="w-auto bg-gray-900 text-white px-10 py-10">
             <h1 className="text-[2rem] font-bold">
                 {projectName}
             </h1>
-            <p className="text-base text-[#3e4447] italic">
+            <p className="text-base text-gray-300 italic">
                 {projectDescription}
             </p>
         </header>
