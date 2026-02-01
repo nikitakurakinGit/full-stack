@@ -9,12 +9,12 @@ export default function Nav() {
                         to="coaches"
                         className={({ isActive }) =>
                             `
-                            block py-2 px-3 rounded font-medium
+                            block py-2 px-3 text-white text-lg rounded font-medium
                             transition-colors duration-200
                             ${
                             isActive
-                                ? "bg-blue-600 text-white"
-                                : "text-[#0c0e0e] hover:text-blue-600"
+                                ? "bg-[#bcc8d0] text-black"
+                                : "text-[#0c0e0e] hover:text-gray-400"
                             }
                             `
                         }
@@ -26,13 +26,13 @@ export default function Nav() {
                     <NavLink 
                         to="athletes"
                         className={({ isActive }) =>
-                            `
-                            block py-2 px-3 rounded font-medium
+                             `
+                            block py-2 px-3 text-white text-lg rounded font-medium
                             transition-colors duration-200
                             ${
                             isActive
-                                ? "bg-blue-600 text-white"
-                                : "text-[#0c0e0e] hover:bg-gray-200 hover:text-blue-600"
+                                ? "bg-[#bcc8d0] text-black"
+                                : "text-[#0c0e0e] hover:text-gray-400"
                             }
                             `
                         }
@@ -44,13 +44,13 @@ export default function Nav() {
                     <NavLink 
                         to="workouts"
                         className={({ isActive }) =>
-                            `
-                            block py-2 px-3 rounded font-medium
+                             `
+                            block py-2 px-3 text-white text-lg rounded font-medium
                             transition-colors duration-200
                             ${
                             isActive
-                                ? "bg-blue-600 text-white"
-                                : "text-[#0c0e0e] hover:bg-gray-200 hover:text-blue-600"
+                                ? "bg-[#bcc8d0] text-black"
+                                : "text-[#0c0e0e] hover:text-gray-400"
                             }
                             `
                         }
