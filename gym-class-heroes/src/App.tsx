@@ -1,4 +1,4 @@
-import './App.css'
+import './App.css';
 import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AthletesPage from './pages/AthletesPage';
@@ -75,9 +75,8 @@ function App() {
             <Route
               path='workouts'
               element={
-                <WorkoutsPage
-                  title="Beginner Level"
-                  workouts={["50 Push-ups", "50 Squats", "50 Sit-ups"]}/>}/>
+                <WorkoutsPage/>}
+                />
             
             <Route
                 path='coaches'
