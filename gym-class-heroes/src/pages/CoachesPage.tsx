@@ -1,24 +1,35 @@
-import type { CoachInterface } from "../components/interface/coachesInterface";
+import { useState } from 'react';
+import Coaches from "../components/coaches/coaches";
+import { coachData } from '../data/coachData';
+import type { CoachInterface } from '../components/interface/coachesInterface';
+import Form from '../components/form/coachForm';
+import type { GroupArrayKey } from '../components/interface/groupArrayKey';
 
-export default function CoachesPage({ coaches }: { coaches: CoachInterface[] }) {
-    return (
-        <section className="bg-[#bcc8d0] text-[#0c0e0e] px-6 py-4">
-            <div>
-                {coaches.map((coach) => (
-                    <div key={coach.id}>
-                        <div className="flex items-baseline gap-2">
-                            <h4 className="text-lg font-semibold drop-shadow">{coach.name}: </h4>
-                            <span className="text-m font-medium mb-2">{coach.title}</span>
-                        </div>
-                        <div>
-                            {coach.athletes.map((athlete) => (
-                            <h6 key={coach.id} className="text-base text-[#3e4447] italic">{athlete}</h6>
-                             ))}
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </section>
-    )
+type CoachPageProps = {
+    addToGroup: (groupId: string, key: GroupArrayKey, subjectId: number) => void;
+    removeFromGroup: (groupId: string, key: GroupArrayKey, subjectId: number) => void;
 }
 
+export default function CoachesPage({ addToGroup, removeFromGroup }: CoachPageProps) {
+    const [coaches, setCoaches] = useState<CoachInterface[]>(coachData)
+
+    const onAddCoach = (newCoach: CoachInterface) => {
+        setCoaches(prev => [...prev, newCoach])
+        addToGroup(newCoach.group, "coachesById", newCoach.id)
+    }
+
+    const onRemoveCoach = (coach: CoachInterface) => {
+        setCoaches( prev => prev.filter(currentCoach => currentCoach.id !== coach.id))
+        removeFromGroup(coach.group, "coachesById", coach.id)
+    }
+
+    return (
+        <>
+            <div className='flex flex-col w-full'>
+                <Coaches coaches={coaches} onRemoveCoach={onRemoveCoach}/>
+                <Form onAddCoach={onAddCoach}/>
+            </div>
+            
+        </>
+    )
+}

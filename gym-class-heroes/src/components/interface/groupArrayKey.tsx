@@ -1,0 +1,1 @@
+export type GroupArrayKey = "coachesById" | "workoutsById" | "athletesById"
