@@ -34,7 +34,6 @@ function App() {
     )
   }
 
-
   //This works basically the same as the above add function. Only now were going to take the key, pull that data and filter through, only passing those ids that dont match the passed(deleted) id.
   const removeFromGroup = (
     groupId: string,
@@ -60,10 +59,18 @@ function App() {
               />
             
             <Route
-              path='athletes'
-              element={
-                <AthletesPage
-                  title="Athletes" athlete={athleteData}/>}/>
+                path="athletes"
+                element={
+                  <AthletesPage
+                    title="Athletes"
+                    athletes={athletes}
+                    setAthletes={setAthletes}
+                    groupsData={groupsData}
+                    addToGroup={addToGroup}
+                    removeFromGroup={removeFromGroup}
+                  />
+                }
+            />
             
             <Route
               path='workouts'
@@ -76,9 +83,11 @@ function App() {
                 path='coaches'
                 element={<CoachesPage addToGroup={addToGroup} removeFromGroup={removeFromGroup}/>}
                 />
-        </Route>
-      </Routes>
-  );
+
+                <Route path="coaches" element={<CoachesPage />} />
+            </Route>
+        </Routes>
+    );
 }
 
-export default App
+export default App;
