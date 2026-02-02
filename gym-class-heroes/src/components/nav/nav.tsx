@@ -9,12 +9,12 @@ export default function Nav() {
                         to="coaches"
                         className={({ isActive }) =>
                             `
-                            block py-2 px-3 text-white text-lg rounded font-medium
+                            block py-2 px-3 text-lg rounded font-medium
                             transition-colors duration-200
                             ${
                             isActive
                                 ? "bg-[#bcc8d0] text-black"
-                                : "text-[#0c0e0e] hover:text-gray-400"
+                                : "text-white hover:text-gray-400"
                             }
                             `
                         }
@@ -27,12 +27,12 @@ export default function Nav() {
                         to="athletes"
                         className={({ isActive }) =>
                              `
-                            block py-2 px-3 text-white text-lg rounded font-medium
+                            block py-2 px-3 text-lg rounded font-medium
                             transition-colors duration-200
                             ${
                             isActive
                                 ? "bg-[#bcc8d0] text-black"
-                                : "text-[#0c0e0e] hover:text-gray-400"
+                                : "text-white hover:text-gray-400"
                             }
                             `
                         }
@@ -45,12 +45,12 @@ export default function Nav() {
                         to="workouts"
                         className={({ isActive }) =>
                              `
-                            block py-2 px-3 text-white text-lg rounded font-medium
+                            block py-2 px-3 text-lg rounded font-medium
                             transition-colors duration-200
                             ${
                             isActive
                                 ? "bg-[#bcc8d0] text-black"
-                                : "text-[#0c0e0e] hover:text-gray-400"
+                                : "text-white hover:text-gray-400"
                             }
                             `
                         }

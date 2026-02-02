@@ -1,4 +1,4 @@
-import './App.css'
+import './App.css';
 import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AthletesPage from './pages/AthletesPage';
@@ -11,7 +11,8 @@ import type { GroupsInterface } from './components/interface/groupsInterface';
 import type { GroupArrayKey } from './components/interface/groupArrayKey';
 
 function App() {
-  const [groupsData, setGroupsData] = useState<GroupsInterface[]>(groupData)
+  const [athletes, setAthletes] = useState(athleteData);
+  const [groupsData, setGroupsData] = useState<GroupsInterface[]>(groupData);
 
   //This is only here for debugging and sanity check puposes. When you update your pages to take the add and remove from group functions. Check your console when you add and remove athletes or workout to make sure everything is working as exepcted.
   useEffect(() => {
@@ -60,17 +61,25 @@ function App() {
               />
             
             <Route
-              path='athletes'
-              element={
-                <AthletesPage
-                  title="Athletes" athlete={athleteData}/>}/>
+                path="athletes"
+                element={
+                  <AthletesPage
+                    title="Athletes"
+                    athletes={athletes}
+                    setAthletes={setAthletes}
+                    groupsData={groupsData}
+                    addToGroup={addToGroup}
+                    removeFromGroup={removeFromGroup}
+                  />
+                }
+            />
             
             <Route
               path='workouts'
               element={
-                <WorkoutsPage
-                  title="Beginner Level"
-                  workouts={["50 Push-ups", "50 Squats", "50 Sit-ups"]}/>}/>
+                <WorkoutsPage 
+                addToGroup={addToGroup} 
+                removeFromGroup={removeFromGroup}/>}/>
             
             <Route
                 path='coaches'
@@ -81,4 +90,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
