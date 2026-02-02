@@ -13,7 +13,7 @@ export function Layout() {
                     projectDescription="Workout Management System"
                 />
             
-                <section className='flex flex-1 justify-center gap-5'>
+                <section className='flex flex-1 justify-center items-center gap-5'>
                     <Outlet />
                 </section>
                 <Footer names={["Faith Hilarde","Nikita Kurakin", "Hoang Son Nguyen"]} />
