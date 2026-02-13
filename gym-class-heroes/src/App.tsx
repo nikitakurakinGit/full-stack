@@ -57,7 +57,10 @@ function App() {
         <Route path="/" element={<Layout/>}>
             <Route
               index
-              element={<CoachesPage addToGroup={addToGroup} removeFromGroup={removeFromGroup}/>}
+              element={
+              <CoachesPage addToGroup={addToGroup} 
+              removeFromGroup={removeFromGroup}
+              groupsData={groupsData}/>}
               />
             
             <Route
@@ -83,7 +86,10 @@ function App() {
             
             <Route
                 path='coaches'
-                element={<CoachesPage addToGroup={addToGroup} removeFromGroup={removeFromGroup}/>}
+                element={
+                <CoachesPage addToGroup={addToGroup} 
+                removeFromGroup={removeFromGroup}
+                groupsData={groupsData}/>}
                 />
         </Route>
       </Routes>
