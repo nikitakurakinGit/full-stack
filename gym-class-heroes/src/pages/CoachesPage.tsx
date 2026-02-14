@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Coaches from "../components/coaches/coaches";
 import { coachData } from '../data/coachData';
 import type { CoachInterface } from '../components/interface/coachesInterface';
 import Form from '../components/form/coachForm';
 import type { GroupArrayKey } from '../components/interface/groupArrayKey';
 import type { GroupsInterface } from '../components/interface/groupsInterface';
+import * as coachServices from '../services/coachServices';
 
 type CoachPageProps = {
     addToGroup: (groupId: string, key: GroupArrayKey, subjectId: number) => void;
@@ -14,9 +15,23 @@ type CoachPageProps = {
 
 export default function CoachesPage({ addToGroup, removeFromGroup, groupsData }: CoachPageProps) {
     const [coaches, setCoaches] = useState<CoachInterface[]>(coachData)
+    //hold group data in state here
+
+    useEffect(() => {
+        const fetchCoaches = async () => {
+            const coaches = await coachServices.fetchCoaches()
+             setCoaches(coaches)
+            
+             //call group fetch service
+        }
+
+        fetchCoaches();
+    }, [])
+
 
     const onAddCoach = (newCoach: CoachInterface) => {
         setCoaches(prev => [...prev, newCoach])
+        coachServices.createCoach(newCoach)
         addToGroup(newCoach.group, "coachesById", newCoach.id)
     }
 
