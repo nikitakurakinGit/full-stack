@@ -1,12 +1,14 @@
 import { useState } from "react";
 import type { CoachInterface } from "../interface/coachesInterface";
+import type { GroupsInterface } from "../interface/groupsInterface";
 
 type FormProp = {
     onAddCoach: (
-    coach: CoachInterface) => void
+    coach: CoachInterface) => void;
+    groupsData: GroupsInterface[];
 }
 
-export default function Form({ onAddCoach }: FormProp) {
+export default function Form({ onAddCoach, groupsData }: FormProp) {
     const [name, setName] = useState("");
     const [title, setTitle] = useState("");
     const [group, setGroup] = useState("");
@@ -55,10 +57,10 @@ export default function Form({ onAddCoach }: FormProp) {
         }, 5000)
     }
 
-
+//  m-5 p-5
     return(
         <>
-            <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center border-2 rounded gap-5 p-5 mt-20 w-full max-w-xl mx-auto">
+            <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center bg-[#222527] text-white shadow-md rounded gap-5 p-5 mt-20 w-full max-w-xl mx-auto">
                 <label>
                     Name: <input
                     value={name}
@@ -81,9 +83,11 @@ export default function Form({ onAddCoach }: FormProp) {
                         className="border-2 rounded p-1 m-2"
                     >
                         <option value="">Select Group</option>
-                        <option value="A">Soccer</option>
-                        <option value="B">Rugby</option>
-                        <option value="C">Hockey</option>
+                        {groupsData.map(group => (
+                            <option key={group.id} value={group.name}>
+                                {group.name}
+                            </option>
+                        ))}
                     </select>
                 </label>
                 {error && (
@@ -100,13 +104,13 @@ export default function Form({ onAddCoach }: FormProp) {
                     <button
                         type="submit"
                         className="border border-black rounded py-2 px-3
-                        bg-white hover:bg-gray-100 active:scale-95
+                        bg-white text-black hover:bg-gray-100 active:scale-95
                         transition">Submit</button>
                     <button
                         type="button"
                         onClick={resetForm}
                         className="border border-black rounded py-2 px-3
-                        bg-white hover:bg-gray-100 active:scale-95
+                        bg-white text-black hover:bg-gray-100 active:scale-95
                         transition">Reset</button>
                 </div>
             </form>
