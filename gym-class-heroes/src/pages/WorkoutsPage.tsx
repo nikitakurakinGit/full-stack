@@ -4,12 +4,14 @@ import type { WorkoutsInterface } from '../components/interface/workoutsInterfac
 import WorkoutForm from '../components/form/workoutForm';
 import { workoutData } from '../data/workoutData';
 import type { GroupArrayKey } from '../components/interface/groupArrayKey';
+import type { GroupsInterface } from '../components/interface/groupsInterface';
 
 type WorkoutPageProps = {
+    groupsData: GroupsInterface[];
     addToGroup: (groupId: string, key: GroupArrayKey, subjectId: number) => void;
     removeFromGroup: (groupId: string, key: GroupArrayKey, subjectId: number) => void; 
 }
-export default function WorkoutsPage({addToGroup, removeFromGroup}: WorkoutPageProps) {
+export default function WorkoutsPage({groupsData, addToGroup, removeFromGroup}: WorkoutPageProps) {
     const [workouts, setWorkouts] = useState<WorkoutsInterface[]>(workoutData)
 
     const onAddWorkout = (newworkout: WorkoutsInterface) => {
@@ -25,11 +27,11 @@ export default function WorkoutsPage({addToGroup, removeFromGroup}: WorkoutPageP
         removeFromGroup(workout.group, "workoutsById", workoutId)
     }
 
-    return(
+    return (
         <>
             <div className='flex flex-col w-full min-h-screen bg-gray-50'>
                 <Workouts workouts={workouts} onRemoveWorkout={onRemoveWorkout}/>
-                <WorkoutForm onAddWorkout={onAddWorkout}/>
+                <WorkoutForm groupsData={groupsData} onAddWorkout={onAddWorkout}/>
             </div>
             
         </>

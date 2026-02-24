@@ -1,20 +1,23 @@
 import { useState } from "react";
 import type { WorkoutsInterface } from "../interface/workoutsInterface";
+import type { GroupsInterface } from "../interface/groupsInterface";
 
 type workoutFormProp = {
+    groupsData: GroupsInterface[];
     onAddWorkout: (
-    workout: WorkoutsInterface) => void
-}
+    workout: WorkoutsInterface) => void;
+};
 
-export default function WorkoutForm({ onAddWorkout }: workoutFormProp) {
+export default function WorkoutForm(
+    {groupsData, onAddWorkout }: workoutFormProp) {
     const [workout, setWorkout] = useState("");
-    const [group, setGroup] = useState("");
+    const [selectedGroupId, setSelectedGroupId] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
     function resetForm(){
         setWorkout("")
-        setGroup("")
+        setSelectedGroupId("")
         setSuccess("")
         setError("")
     }
@@ -27,7 +30,7 @@ export default function WorkoutForm({ onAddWorkout }: workoutFormProp) {
             return
         }
 
-        if(!group) {
+        if(!selectedGroupId) {
             setError("Select Group");
             return;
         }
@@ -45,7 +48,7 @@ export default function WorkoutForm({ onAddWorkout }: workoutFormProp) {
         const newWorkout: WorkoutsInterface = {
             id: Math.floor(1000 + Math.random() * 9000),
             workout: workoutArray,            
-            group: group,
+            group: selectedGroupId,
         }
 
         onAddWorkout(newWorkout)
@@ -56,7 +59,6 @@ export default function WorkoutForm({ onAddWorkout }: workoutFormProp) {
             setSuccess("")
         }, 5000)
     }
-
 
     return(
         <>
@@ -74,14 +76,16 @@ export default function WorkoutForm({ onAddWorkout }: workoutFormProp) {
                 <label>
                     Group:
                     <select
-                        value={group}
-                        onChange={(e) => setGroup(e.target.value)}
+                        value={selectedGroupId}
+                        onChange={(e) => setSelectedGroupId(e.target.value)}
                         className="border-2 rounded p-2 mt-1 w-full"
                         >
-                        <option>Select Group</option>
-                        <option value="A">Soccer</option>
-                        <option value="B">Rugby</option>
-                        <option value="C">Hockey</option>
+                        <option value="">Select Group</option>
+                        {groupsData.map((g) => (
+                            <option key={g.id} value={g.id}>
+                                {g.name}
+                            </option>
+                        ))}
                     </select>
                 </label>
                 {error && (
