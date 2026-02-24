@@ -8,7 +8,7 @@ export function fetchAthletes(): AthletesInterface[] {
 
 // Get athlete by ID
 export function getAthleteById(id: number): AthletesInterface {
-    const foundAthlete = athleteData.find(a => a.id === id);
+    const foundAthlete = athleteData.find(athlete => athlete.id === id);
 
     if (!foundAthlete) {
         throw new Error(`Failed to fetch athlete with id ${id}`);
@@ -27,7 +27,7 @@ export function createAthlete(newAthlete: AthletesInterface): AthletesInterface 
 export function updateAthlete(
     updatedAthlete: AthletesInterface
 ): AthletesInterface {
-    const index = athleteData.findIndex(a => a.id === updatedAthlete.id);
+    const index = athleteData.findIndex(athlete => athlete.id === updatedAthlete.id);
 
     if (index === -1) {
         throw new Error(`Failed to update athlete with id ${updatedAthlete.id}`);
@@ -39,7 +39,7 @@ export function updateAthlete(
 
 // Delete an athlete
 export function deleteAthlete(id: number): boolean {
-    const index = athleteData.findIndex(a => a.id === id);
+    const index = athleteData.findIndex(athlete => athlete.id === id);
 
     if (index === -1) {
         throw new Error(`Failed to delete athlete with id ${id}`);
