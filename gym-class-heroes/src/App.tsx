@@ -82,7 +82,8 @@ function App() {
               element={
                 <WorkoutsPage 
                 addToGroup={addToGroup} 
-                removeFromGroup={removeFromGroup}/>}/>
+                removeFromGroup={removeFromGroup}
+                groupsData={groupsData}/>}/>
             
             <Route
                 path='coaches'
