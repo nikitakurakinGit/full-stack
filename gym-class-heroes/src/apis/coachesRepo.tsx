@@ -6,5 +6,14 @@ export function fetchCoaches(): CoachInterface[]{
 }
 
 export function createCoach({id, name, title, group}: CoachInterface) {
-    return coachData.push({id, name, title, group})
+    const newCoach: CoachInterface = {
+        id: id,
+        name: name,
+        title: title,
+        group: group
+    }
+    
+    coachData.push(newCoach)
+
+    return newCoach
 }

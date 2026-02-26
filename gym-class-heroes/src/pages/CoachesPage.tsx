@@ -20,8 +20,7 @@ export default function CoachesPage({ addToGroup, removeFromGroup, groupsData }:
     useEffect(() => {
         const fetchCoaches = async () => {
             const coaches = await coachServices.fetchCoaches()
-             setCoaches(coaches)
-            
+             setCoaches([...coaches])
              //call group fetch service
         }
 

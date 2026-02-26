@@ -26,8 +26,8 @@ export function validateGroup(group: string) {
     return null;
 }
 
-export function createCoach({name, title, group}: CoachInterface) {
-    const emplId: number = Math.floor(1000 + Math.random() * 9000)
+export function createCoach({id, name, title, group}: CoachInterface) {
+    
     
     const nameErr = validateCoachName(name);
     if(nameErr) return nameErr;
@@ -39,7 +39,7 @@ export function createCoach({name, title, group}: CoachInterface) {
     if(groupErr) return groupErr;
 
     const newCoach: CoachInterface = {
-        id: emplId,
+        id: id,
         name: name,
         title: title,
         group: group

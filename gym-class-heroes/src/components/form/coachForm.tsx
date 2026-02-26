@@ -43,6 +43,15 @@ export default function Form({ onAddCoach, groupsData }: FormProp) {
         
         if(!isNameValid || !isTitleValid || isGroupValid) return;
 
+        const coachId: number = Math.floor(1000 + Math.random() * 9000)
+
+        const newCoach = {
+            id: coachId,
+            name: name.value,
+            title: title.value,
+            group: group.value
+        }
+
         onAddCoach(newCoach)
         resetForm()
 
