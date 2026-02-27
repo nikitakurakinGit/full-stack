@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Workouts from "../components/workouts/workouts";
 import type { WorkoutsInterface } from '../components/interface/workoutsInterface';
 import WorkoutForm from '../components/form/workoutForm';
-import { workoutData } from '../data/workoutData';
 import type { GroupArrayKey } from '../components/interface/groupArrayKey';
 import type { GroupsInterface } from '../components/interface/groupsInterface';
+import * as workoutService from "../services/workoutServices";
 
 type WorkoutPageProps = {
     groupsData: GroupsInterface[];
@@ -12,20 +12,35 @@ type WorkoutPageProps = {
     removeFromGroup: (groupId: string, key: GroupArrayKey, subjectId: number) => void; 
 }
 export default function WorkoutsPage({groupsData, addToGroup, removeFromGroup}: WorkoutPageProps) {
-    const [workouts, setWorkouts] = useState<WorkoutsInterface[]>(workoutData)
+    const [workouts, setWorkouts] = useState<WorkoutsInterface[]>([]);
 
-    const onAddWorkout = (newworkout: WorkoutsInterface) => {
-        setWorkouts(prev => [...prev, newworkout]);
-        addToGroup(newworkout.group, "workoutsById", newworkout.id)
-    }
+    useEffect(() => {
+        const workoutData = workoutService.fetchWorkouts();
+        setWorkouts(workoutData);
+    }, []);
+
+    const onAddWorkout = (newWorkout: WorkoutsInterface) => {
+        const workoutResult = workoutService.createWorkout(newWorkout);
+
+        if (typeof workoutResult === "string") {
+            console.error(workoutResult);
+            return;
+        }
+
+        setWorkouts(workoutService.fetchWorkouts());
+
+        addToGroup(workoutResult.group, "workoutsById", workoutResult.id);
+    };
 
     const onRemoveWorkout = (workoutId: number) => {
-        const workout = workouts.find(currentWorkout => currentWorkout.id === workoutId);
-        if (!workout) return;
+        const workout = workoutService.getWorkoutById(workoutId);
 
-        setWorkouts( prev => prev.filter(currentWorkout => currentWorkout.id !== workoutId));
-        removeFromGroup(workout.group, "workoutsById", workoutId)
-    }
+        workoutService.deleteWorkout(workoutId);
+        
+        setWorkouts(workoutService.fetchWorkouts());
+
+        removeFromGroup(workout.group, "workoutsById", workoutId);
+    };
 
     return (
         <>
