@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { GroupsInterface } from "../components/interface/groupsInterface";
-import * as GroupService from "../services/groupService";
+import * as GroupService from "../services/groupServices";
+import type { GroupArrayKey } from "../components/interface/groupArrayKey";
 
 export function useGroupData(dependencies: unknown[] = []) {
   const [groups, setGroups] = useState<GroupsInterface[]>([]);
@@ -11,7 +12,7 @@ export function useGroupData(dependencies: unknown[] = []) {
    */
   const fetchGroups = async () => {
     try {
-      const result = await GroupService.getAllGroups();
+      const result = await GroupService.fetchGroups();
       setGroups([...result]);
     } catch (errorObject) {
       setError(`${errorObject}`);
@@ -19,35 +20,32 @@ export function useGroupData(dependencies: unknown[] = []) {
   };
 
   /**
-   * Add resource (athlete, coach, workout) to group
-   * After service updates data, re-fetch groups
-   * e.g. addToGroup("athlete", athlete.id, groupId)
+   * 
    */
   const addToGroup = async (
-    resourceType: string,
-    resourceId: number,
-    groupId: string
+      groupId: string,
+      key: GroupArrayKey,
+      subjectId: number
   ) => {
     try {
-      await GroupService.addToGroup(resourceType, resourceId, groupId);
-      await fetchGroups();
+      const updatedGroups = await GroupService.addToGroup({groupId, key, subjectId});
+      setGroups(updatedGroups);
     } catch (errorObject) {
       setError(`${errorObject}`);
     }
   };
 
   /**
-   * Remove resource from group.
-   * After service updates data, re-fetch groups.
+   * 
    */
   const removeFromGroup = async (
-    resourceType: string,
-    resourceId: number,
-    groupId: string
+      groupId: string,
+      key: GroupArrayKey,
+      subjectId: number
   ) => {
     try {
-      await GroupService.removeFromGroup(resourceType, resourceId, groupId);
-      await fetchGroups();
+      const updatedGroups = await GroupService.removeFromGroup({groupId, key, subjectId});
+      setGroups(updatedGroups);
     } catch (errorObject) {
       setError(`${errorObject}`);
     }
