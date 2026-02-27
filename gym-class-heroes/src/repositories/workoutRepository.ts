@@ -18,10 +18,15 @@ export function getWorkoutById(id: number): WorkoutsInterface {
 }
 
 // Create a new workout
-export function createWorkout(
-    newWorkout: WorkoutsInterface
-): WorkoutsInterface {
+export function createWorkout({id, workout, group}: WorkoutsInterface) {
+    const newWorkout: WorkoutsInterface = {
+        id: id,
+        workout: workout,
+        group: group
+    };
+
     workoutData.push(newWorkout);
+
     return newWorkout;
 }
 
