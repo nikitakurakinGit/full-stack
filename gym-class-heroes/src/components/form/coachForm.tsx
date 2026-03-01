@@ -4,13 +4,15 @@ import * as coachService from '../../services/coachServices';
 import type { CoachInterface } from "../interface/coachesInterface";
 import type { GroupsInterface } from "../interface/groupsInterface";
 
+//I think this form should be on a click basis. Like its just a button that says add coach and the form pops up middle of the screen and blanks out the background. Shouldnt be too hard.
+
 type FormProp = {
     onAddCoach: (
     coach: CoachInterface) => void;
-    groupsData: GroupsInterface[];
+    groups: GroupsInterface[];
 }
 
-export default function Form({ onAddCoach, groupsData }: FormProp) {
+export default function Form({ onAddCoach, groups }: FormProp) {
     const name = useFormInput("", (value) => {
         return coachService.validateCoachName(value)
     })
@@ -40,8 +42,9 @@ export default function Form({ onAddCoach, groupsData }: FormProp) {
         const isNameValid = name.validate()
         const isTitleValid = title.validate()
         const isGroupValid = group.validate()
+
         
-        if(!isNameValid || !isTitleValid || isGroupValid) return;
+        if(!isNameValid || !isTitleValid || !isGroupValid) return;
 
         const coachId: number = Math.floor(1000 + Math.random() * 9000)
 
@@ -51,7 +54,7 @@ export default function Form({ onAddCoach, groupsData }: FormProp) {
             title: title.value,
             group: group.value
         }
-
+        
         onAddCoach(newCoach)
         resetForm()
 
@@ -61,55 +64,61 @@ export default function Form({ onAddCoach, groupsData }: FormProp) {
         }, 5000)
     }
 
-//  m-5 p-5
+
     return(
         <>
             <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center bg-[#222527] text-white shadow-md rounded gap-5 p-5 mt-20 w-full max-w-xl mx-auto">
                 <label>
                     Name: <input
                     value={name.value}
-                    onChange={(e) => name.setValue(e.target.value)} className="border-2 rounded"
+                    onChange={(e) => name.setValue(e.target.value)} className="border-2 rounded text-black"
                     name="myInput"
                     placeholder=" Coach name"/>
                     
-                    {name.error && (
-                    <p className="text-red-600 text-sm font-medium">
-                        {name.error}
-                    </p>
-                )}
+                    <div className="flex items-center justify-center mt-3">
+                        {name.error && (
+                        <p className="text-red-600 text-sm font-medium">
+                            {name.error}
+                        </p>
+                        )}
+                    </div>
                 </label>
                 <label>
                     Title: <input
                     value={title.value}
-                    onChange={(e) => title.setValue(e.target.value)} className="border-2 rounded"
+                    onChange={(e) => title.setValue(e.target.value)} className="border-2 rounded text-black"
                     name="myInput"
                     placeholder=" Coach title"/>
-
-                    {title.error && (
-                    <p className="text-red-600 text-sm font-medium">
-                        {title.error}
-                    </p>
-                )}
+                    
+                    <div className="flex items-center justify-center mt-3">
+                        {title.error && (
+                        <p className="text-red-600 text-sm font-medium">
+                            {title.error}
+                        </p>
+                        )}
+                    </div>
                 </label>
                 <label>
                     Group: 
                     <select
                         value={group.value}
                         onChange={(e) => group.setValue(e.target.value)}
-                        className="border-2 rounded p-1 m-2"
+                        className="border-2 rounded p-1 m-2 text-black"
                     >
                         <option value="">Select Group</option>
-                        {groupsData.map(group => (
+                        {groups.map(group => (
                             <option key={group.id} value={group.name}>
                                 {group.name}
                             </option>
                         ))}
                     </select>
-                    {group.error && (
-                    <p className="text-red-600 text-sm font-medium">
-                        {group.error}
-                    </p>
-                )}
+                    <div className="flex items-center justify-center mt-3">
+                        {group.error && (
+                        <p className="text-red-600 text-sm font-medium">
+                            {group.error}
+                        </p>
+                        )}
+                    </div>
                 </label>
                 {success && (
                     <p className="text-green-600 text-sm font-medium">

@@ -1,7 +1,7 @@
 import * as coachServices from '../apis/coachesRepo';
 import type { CoachInterface } from '../components/interface/coachesInterface';
 
-export async function fetchCoaches() {
+export async function fetchCoaches(): Promise<CoachInterface[]> {
     const coaches = await coachServices.fetchCoaches();
     return coaches;
 }
@@ -26,7 +26,7 @@ export function validateGroup(group: string) {
     return null;
 }
 
-export function createCoach({id, name, title, group}: CoachInterface) {
+export async function createCoach({id, name, title, group}: CoachInterface) {
     
     
     const nameErr = validateCoachName(name);
@@ -46,4 +46,9 @@ export function createCoach({id, name, title, group}: CoachInterface) {
     }
 
     return coachServices.createCoach(newCoach)
+}
+
+export async function deleteCoach(coachId: number) {
+    console.log("deleteCoach service ran")
+    return coachServices.deleteCoach(coachId)
 }
