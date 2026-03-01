@@ -1,4 +1,4 @@
-import * as AthleteRepo from "../src/apis/athleteRepository";
+import * as AthleteRepo from "../apis/athleteRepository";
 import type { AthletesInterface } from "../components/interface/athletesInterface";
 
 export async function fetchAthletes() {

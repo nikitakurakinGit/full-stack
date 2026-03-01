@@ -20,7 +20,7 @@ export default function AthletesPage() {
      */
 
     const [athletes, setAthletes] = useState<AthletesInterface[]>([]);
-    const { groupsData, error, addToGroup, removeFromGroup } = useGroupData();
+    const { groups, error, addToGroup, removeFromGroup } = useGroupData();
 
     // FETCH ATHLETES ON LOAD
     useEffect(() => {
@@ -54,10 +54,10 @@ export default function AthletesPage() {
     // REMOVE ATHLETE
     const onRemoveAthlete = async (athlete: AthletesInterface) => {
         try {
-            const deletedAthleteId = await athleteService.deleteAthlete(athlete.id);
+            await athleteService.deleteAthlete(athlete.id);
 
             // REMOVE ATHLETE FROM THEIR GROUP
-            groupsData.forEach((group) => {
+            groups.forEach((group) => {
                 if (group.athletesById.includes(athlete.id)) {
                     removeFromGroup(group.id, "athletesById", athlete.id);
                 }
@@ -65,7 +65,7 @@ export default function AthletesPage() {
 
             // REMOVE ATHLETE FROM ATHLETE LIST
             setAthletes(prev =>
-                prev.filter(athlete => athlete.id !== deletedAthleteId)
+                prev.filter(a => a.id !== athlete.id)
             );
 
         } catch (err) {
@@ -84,7 +84,7 @@ export default function AthletesPage() {
               */}
             <AthleteList
                 athletes={athletes}
-                groupsData={groupsData}
+                groupsData={groups}
                 onRemoveAthlete={onRemoveAthlete}
             />
 
@@ -99,7 +99,7 @@ export default function AthletesPage() {
               */}
             <AthleteForm
                 addAthlete={onAddAthlete}
-                groupsData={groupsData}
+                groupsData={groups}
             />
 
             {error && (
