@@ -3,24 +3,33 @@ import type { AthletesInterface } from "../components/interface/athletesInterfac
 
 // Get all athletes
 export function fetchAthletes(): AthletesInterface[] {
-    return athleteData;
+  return athleteData;
 }
 
 // Get athlete by ID
 export function getAthleteById(id: number): AthletesInterface {
-    const foundAthlete = athleteData.find(athlete => athlete.id === id);
+  const foundAthlete = athleteData.find(athlete => athlete.id === id);
 
-    if (!foundAthlete) {
-        throw new Error(`Failed to fetch athlete with id ${id}`);
-    }
+  if (!foundAthlete) {
+    throw new Error(`Failed to fetch athlete with id ${id}`);
+  }
 
-    return foundAthlete;
+  return foundAthlete;
 }
 
 // Create a new athlete
-export function createAthlete(newAthlete: AthletesInterface): AthletesInterface {
-    athleteData.push(newAthlete);
-    return newAthlete;
+export function createAthlete({ id, name, sport, experience, status }: AthletesInterface) {
+  const newAthlete: AthletesInterface = {
+      id: id,
+      name: name,
+      sport: sport,
+      experience: experience,
+      status: status
+  };
+
+  athleteData.push(newAthlete);
+
+  return newAthlete;
 }
 
 // Update an existing athlete
