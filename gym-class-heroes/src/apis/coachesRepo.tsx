@@ -17,3 +17,13 @@ export function createCoach({id, name, title, group}: CoachInterface) {
 
     return newCoach
 }
+
+export function deleteCoach(coachId: number) {
+    const index = coachData.findIndex(c => c.id === coachId)
+
+    if(index !== -1) {
+        coachData.splice(index, 1)
+    }
+
+    return coachId
+}
