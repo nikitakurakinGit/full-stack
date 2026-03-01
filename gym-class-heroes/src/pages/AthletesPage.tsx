@@ -1,61 +1,110 @@
-import type { AthletesInterface } from "../components/interface/athletesInterface";
-import type { GroupsInterface } from "../components/interface/groupsInterface";
+import { useEffect, useState } from "react";
+import * as athleteService from "../services/athleteServices";
 
 import AthleteList from "../components/athletes/athletesList";
 import AthleteForm from "../components/form/athleteForm";
 
+import { useGroupData } from "../hooks/useGroupData";
+import type { AthletesInterface } from "../components/interface/athletesInterface";
 
-type AthletesPageProps = {
-    title: string;
-    athletes: AthletesInterface[];
-    setAthletes: React.Dispatch<React.SetStateAction<AthletesInterface[]>>;
-    groupsData: GroupsInterface[];
-    addToGroup: (
-        groupId: string,
-        key: "athletesById",
-        subjectId: number,
-    ) => void;
-    removeFromGroup: (
-        groupId: string,
-        key: "athletesById",
-        subjectId: number,
-    ) => void;
-}
+export default function AthletesPage() {
+	/**
+     * AthletesPage Component
+     *
+     * This page controls all athlete data in the app.
+     * It loads athletes from AthleteService when the page starts.
+     * It uses the custom hook useGroupData() to get groups and update group
+     * It passes athletes to athleteList so the list can display them.
+     * It passes addAthlete to athleteForm so the form can create new athletes.
+     *
+     */
 
-export default function AthletesPage({
-    title,
-    athletes,
-    setAthletes,
-    groupsData,
-    addToGroup,
-}: AthletesPageProps) {
+    const [athletes, setAthletes] = useState<AthletesInterface[]>([]);
+    const { groupsData, error, addToGroup, removeFromGroup } = useGroupData();
 
-    const onAddAthlete = (newAthlete: AthletesInterface, groupId: string) => {
-        setAthletes(prev => [...prev, newAthlete]);
-        addToGroup(groupId, "athletesById", newAthlete.id);
+    // FETCH ATHLETES ON LOAD
+    useEffect(() => {
+        const fetchAthletes = async () => {
+            const data = await athleteService.fetchAthletes();
+            setAthletes([...data]);
+        };
+        fetchAthletes();
+    }, []);
+
+    // ADD ATHLETE
+    const onAddAthlete = async (newAthlete: AthletesInterface, groupId: string) => {
+        try {
+            const createdAthlete = await athleteService.createAthlete(newAthlete);
+
+            if (typeof createdAthlete === "string") {
+                console.error(createdAthlete);
+                return;
+            }
+
+            setAthletes(prev => [...prev, newAthlete]);
+
+            // ADD ATHLETE TO GROUP
+            addToGroup(groupId, "athletesById", newAthlete.id);
+
+        } catch (err) {
+            console.error(err);
+        }
     };
 
-    const onRemoveAthlete = (athlete: AthletesInterface) => {
-        // remove from athlete list
-        setAthletes(prev => prev.filter(currentAthlete => currentAthlete.id !== athlete.id));
+    // REMOVE ATHLETE
+    const onRemoveAthlete = async (athlete: AthletesInterface) => {
+        try {
+            const deletedAthleteId = await athleteService.deleteAthlete(athlete.id);
+
+            // REMOVE ATHLETE FROM THEIR GROUP
+            groupsData.forEach((group) => {
+                if (group.athletesById.includes(athlete.id)) {
+                    removeFromGroup(group.id, "athletesById", athlete.id);
+                }
+            });
+
+            // REMOVE ATHLETE FROM ATHLETE LIST
+            setAthletes(prev =>
+                prev.filter(athlete => athlete.id !== deletedAthleteId)
+            );
+
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
-        <section className="athletes px-6 py-4 max-w-7xl mx-auto">
-            <h2 className="text-[1.25rem] font-bold uppercase tracking-wide text-[#0c0e0e] drop-shadow mb-4">
-                {title}
-            </h2>
-
+        <div className="flex flex-col w-full px-6 py-4 max-w-7xl mx-auto">
+						{/**
+              * AthleteList Component
+              *
+              * athletes: the list of all athletes to display
+              * groupsData: so it can show which group each athlete belongs to
+              * onRemoveAthlete: a function to remove an athlete when the user clicks delete
+              */}
             <AthleteList
                 athletes={athletes}
                 groupsData={groupsData}
                 onRemoveAthlete={onRemoveAthlete}
             />
 
+						{/**
+              * AthleteForm Component
+              *
+              * addAthlete: a function to create a new athlete
+              * groupsData: so the form can show the group dropdown
+              *
+              * AthleteForm handles the input fields and validation.
+              * When the form submits, it sends the new athlete back to this page.
+              */}
             <AthleteForm
-                groupsData={groupsData}
                 addAthlete={onAddAthlete}
+                groupsData={groupsData}
             />
-        </section>
+
+            {error && (
+                <p className="text-red-600 text-sm mt-2">{error}</p>
+            )}
+        </div>
     );
 }
