@@ -67,6 +67,6 @@ export function updateWorkout(
 
 
 // Delete workout
-export function deleteWorkout(id: number): boolean {
+export function deleteWorkout(id: number): number {
     return workoutRepo.deleteWorkout(id);
 }
