@@ -1,51 +1,60 @@
 import { useState } from "react";
+import { useFormInput } from "../../hooks/useFormInput";
+import * as coachService from '../../services/coachServices';
 import type { CoachInterface } from "../interface/coachesInterface";
+import type { GroupsInterface } from "../interface/groupsInterface";
+
+//I think this form should be on a click basis. Like its just a button that says add coach and the form pops up middle of the screen and blanks out the background. Shouldnt be too hard.
 
 type FormProp = {
     onAddCoach: (
-    coach: CoachInterface) => void
+    coach: CoachInterface) => void;
+    groups: GroupsInterface[];
 }
 
-export default function Form({ onAddCoach }: FormProp) {
-    const [name, setName] = useState("");
-    const [title, setTitle] = useState("");
-    const [group, setGroup] = useState("");
-    const [error, setError] = useState("");
+export default function Form({ onAddCoach, groups }: FormProp) {
+    const name = useFormInput("", (value) => {
+        return coachService.validateCoachName(value)
+    })
+
+    const title = useFormInput("", (value) => {
+        return coachService.validateCoachTitle(value)
+    })
+
+    const group = useFormInput("", (value) => {
+        return coachService.validateGroup(value)
+    })
+
+
     const [success, setSuccess] = useState("");
 
     function resetForm(){
-        setName("")
-        setTitle("")
-        setGroup("")
-        setSuccess("")
-        setError("")
+        name.reset()
+        title.reset()
+        group.reset()
+        setSuccess("")    
     }
+
     
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
-        if(!name.trim()) {
-            setError("Enter coach name")
-            return
-        }
+        const isNameValid = name.validate()
+        const isTitleValid = title.validate()
+        const isGroupValid = group.validate()
 
-        if(!title.trim()) {
-            setError("Enter coach title")
-            return
-        }
+        
+        if(!isNameValid || !isTitleValid || !isGroupValid) return;
 
-        if(!group) {
-            setError("Select Group")
-            return
-        }
+        const coachId: number = Math.floor(1000 + Math.random() * 9000)
 
-        const newCoach: CoachInterface = {
-            id: Math.floor(1000 + Math.random() * 9000),
-            name,
-            title,
-            group
+        const newCoach = {
+            id: coachId,
+            name: name.value,
+            title: title.value,
+            group: group.value
         }
-
+        
         onAddCoach(newCoach)
         resetForm()
 
@@ -58,39 +67,59 @@ export default function Form({ onAddCoach }: FormProp) {
 
     return(
         <>
-            <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center border-2 rounded gap-5 p-5 mt-20 w-full max-w-xl mx-auto">
+            <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center bg-[#222527] text-white shadow-md rounded gap-5 p-5 mt-20 w-full max-w-xl mx-auto">
                 <label>
                     Name: <input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)} className="border-2 rounded"
+                    value={name.value}
+                    onChange={(e) => name.setValue(e.target.value)} className="border-2 rounded text-black"
                     name="myInput"
                     placeholder=" Coach name"/>
+                    
+                    <div className="flex items-center justify-center mt-3">
+                        {name.error && (
+                        <p className="text-red-600 text-sm font-medium">
+                            {name.error}
+                        </p>
+                        )}
+                    </div>
                 </label>
                 <label>
                     Title: <input
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)} className="border-2 rounded"
+                    value={title.value}
+                    onChange={(e) => title.setValue(e.target.value)} className="border-2 rounded text-black"
                     name="myInput"
                     placeholder=" Coach title"/>
+                    
+                    <div className="flex items-center justify-center mt-3">
+                        {title.error && (
+                        <p className="text-red-600 text-sm font-medium">
+                            {title.error}
+                        </p>
+                        )}
+                    </div>
                 </label>
                 <label>
                     Group: 
                     <select
-                        value={group}
-                        onChange={(e) => setGroup(e.target.value)}
-                        className="border-2 rounded p-1 m-2"
+                        value={group.value}
+                        onChange={(e) => group.setValue(e.target.value)}
+                        className="border-2 rounded p-1 m-2 text-black"
                     >
                         <option value="">Select Group</option>
-                        <option value="A">Soccer</option>
-                        <option value="B">Rugby</option>
-                        <option value="C">Hockey</option>
+                        {groups.map(group => (
+                            <option key={group.id} value={group.name}>
+                                {group.name}
+                            </option>
+                        ))}
                     </select>
+                    <div className="flex items-center justify-center mt-3">
+                        {group.error && (
+                        <p className="text-red-600 text-sm font-medium">
+                            {group.error}
+                        </p>
+                        )}
+                    </div>
                 </label>
-                {error && (
-                    <p className="text-red-600 text-sm font-medium">
-                        {error}
-                    </p>
-                )}
                 {success && (
                     <p className="text-green-600 text-sm font-medium">
                         {success}
@@ -100,13 +129,13 @@ export default function Form({ onAddCoach }: FormProp) {
                     <button
                         type="submit"
                         className="border border-black rounded py-2 px-3
-                        bg-white hover:bg-gray-100 active:scale-95
+                        bg-white text-black hover:bg-gray-100 active:scale-95
                         transition">Submit</button>
                     <button
                         type="button"
                         onClick={resetForm}
                         className="border border-black rounded py-2 px-3
-                        bg-white hover:bg-gray-100 active:scale-95
+                        bg-white text-black hover:bg-gray-100 active:scale-95
                         transition">Reset</button>
                 </div>
             </form>

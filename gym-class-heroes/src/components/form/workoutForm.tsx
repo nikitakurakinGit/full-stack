@@ -1,62 +1,58 @@
 import { useState } from "react";
 import type { WorkoutsInterface } from "../interface/workoutsInterface";
+import type { GroupsInterface } from "../interface/groupsInterface";
+import { useFormInput } from "../../hooks/useFormInput";
+import * as workoutService from "../../services/workoutServices";
 
 type workoutFormProp = {
+    groupsData: GroupsInterface[];
     onAddWorkout: (
-    workout: WorkoutsInterface) => void
-}
+    workout: WorkoutsInterface) => void;
+};
 
-export default function WorkoutForm({ onAddWorkout }: workoutFormProp) {
-    const [workout, setWorkout] = useState("");
-    const [group, setGroup] = useState("");
-    const [error, setError] = useState("");
+export default function WorkoutForm(
+    {groupsData, onAddWorkout }: workoutFormProp) {
+    const workoutList = useFormInput("", (value) => {
+        const arr = value.split(",").map(w => w.trim()).filter(w => w !== "");
+        return workoutService.validateWorkoutList(arr);
+    });
+
+    const group = useFormInput("", (value) => {
+        return workoutService.validateGroup(value);
+    });
+
     const [success, setSuccess] = useState("");
 
     function resetForm(){
-        setWorkout("")
-        setGroup("")
-        setSuccess("")
-        setError("")
+        workoutList.reset();
+        group.reset();
+        setSuccess("");
     }
     
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
-        if(!workout.trim()) {
-            setError("Enter Workout list, separated by comma")
-            return
-        }
+        const isWorkoutValid = workoutList.validate();
+        const isGroupValid = group.validate();
 
-        if(!group) {
-            setError("Select Group");
-            return;
-        }
-
-        const workoutArray = workout
-        .split(",")
-        .map(item => item.trim())
-        .filter(item => item !== "");
-
-        if (workoutArray.length === 0) {
-            setError("Enter at least one valid workout");
-            return;
-        }
+        if (!isWorkoutValid || !isGroupValid) return;
 
         const newWorkout: WorkoutsInterface = {
             id: Math.floor(1000 + Math.random() * 9000),
-            workout: workoutArray,            
-            group: group,
+            workout: workoutList.value
+                .split(",")
+                .map(w => w.trim())
+                .filter(w => w !== ""),
+            group: group.value
+        };
+
+        onAddWorkout(newWorkout);
+        resetForm();
+
+        setSuccess("Workout added successfully");
+        setTimeout(() => setSuccess(""), 5000);
         }
-
-        onAddWorkout(newWorkout)
-        resetForm()
-
-        setSuccess("Workout added successfully")
-        setTimeout(() => {
-            setSuccess("")
-        }, 5000)
-    }
-
+        
 
     return(
         <>
@@ -65,8 +61,8 @@ export default function WorkoutForm({ onAddWorkout }: workoutFormProp) {
              bg-[#bcc8d0] border-2 border-gray-300 rounded-2xl">
                 <label>
                     New Workout: <input
-                    value={workout}
-                    onChange={(e) => setWorkout(e.target.value)} className="border-2 rounded"
+                    value={workoutList.value}
+                    onChange={(e) => workoutList.setValue(e.target.value)} className="border-2 rounded"
                     name="myInput"
                     placeholder=" Workout List (comma)"
                     />
@@ -74,19 +70,21 @@ export default function WorkoutForm({ onAddWorkout }: workoutFormProp) {
                 <label>
                     Group:
                     <select
-                        value={group}
-                        onChange={(e) => setGroup(e.target.value)}
+                        value={group.value}
+                        onChange={(e) => group.setValue(e.target.value)}
                         className="border-2 rounded p-2 mt-1 w-full"
                         >
-                        <option>Select Group</option>
-                        <option value="A">Soccer</option>
-                        <option value="B">Rugby</option>
-                        <option value="C">Hockey</option>
+                        <option value="">Select Group</option>
+                        {groupsData.map((g) => (
+                            <option key={g.id} value={g.id}>
+                                {g.name}
+                            </option>
+                        ))}
                     </select>
                 </label>
-                {error && (
+                {group.error && (
                     <p className="text-red-600 text-sm font-medium">
-                        {error}
+                        {group.error}
                     </p>
                 )}
                 {success && (
