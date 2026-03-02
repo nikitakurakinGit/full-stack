@@ -34,19 +34,13 @@ function App() {
                     removeFromGroup={removeFromGroup}
                   />
                 }
-            />
+            />*/}
             
             <Route
               path='workouts'
               element={
                 <WorkoutsPage 
-                addToGroup={addToGroup} 
-<<<<<<< HEAD
-                removeFromGroup={removeFromGroup}
-                groupsData={groupsData}/>}/>
-=======
-                removeFromGroup={removeFromGroup}/>}/> */}
->>>>>>> origin/develop
+                />}/> 
             
             <Route
                 path='coaches'

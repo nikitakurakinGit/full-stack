@@ -18,11 +18,12 @@ export function getWorkoutById(id: number): WorkoutsInterface {
 }
 
 // Create a new workout
-export function createWorkout({id, workout, group}: WorkoutsInterface) {
+export function createWorkout({id, workout, group}: WorkoutsInterface): WorkoutsInterface {
+
     const newWorkout: WorkoutsInterface = {
-        id: id,
-        workout: workout,
-        group: group
+        id,
+        workout,
+        group
     };
 
     workoutData.push(newWorkout);
@@ -49,7 +50,7 @@ export function updateWorkout(
 }
 
 // Delete a workout
-export function deleteWorkout(id: number): boolean {
+export function deleteWorkout(id: number): number {
     const index = workoutData.findIndex(w => w.id === id);
 
     if (index === -1) {
@@ -57,5 +58,5 @@ export function deleteWorkout(id: number): boolean {
     }
 
     workoutData.splice(index, 1);
-    return true;
+    return id;
 }

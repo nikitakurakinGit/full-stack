@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { WorkoutsInterface } from "../interface/workoutsInterface";
 import type { GroupsInterface } from "../interface/groupsInterface";
+import { useFormInput } from "../../hooks/useFormInput";
+import * as workoutService from "../../services/workoutServices";
 
 type workoutFormProp = {
     groupsData: GroupsInterface[];
@@ -10,55 +12,47 @@ type workoutFormProp = {
 
 export default function WorkoutForm(
     {groupsData, onAddWorkout }: workoutFormProp) {
-    const [workout, setWorkout] = useState("");
-    const [selectedGroupId, setSelectedGroupId] = useState("");
-    const [error, setError] = useState("");
+    const workoutList = useFormInput("", (value) => {
+        const arr = value.split(",").map(w => w.trim()).filter(w => w !== "");
+        return workoutService.validateWorkoutList(arr);
+    });
+
+    const group = useFormInput("", (value) => {
+        return workoutService.validateGroup(value);
+    });
+
     const [success, setSuccess] = useState("");
 
     function resetForm(){
-        setWorkout("")
-        setSelectedGroupId("")
-        setSuccess("")
-        setError("")
+        workoutList.reset();
+        group.reset();
+        setSuccess("");
     }
     
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
-        if(!workout.trim()) {
-            setError("Enter Workout list, separated by comma")
-            return
-        }
+        const isWorkoutValid = workoutList.validate();
+        const isGroupValid = group.validate();
 
-        if(!selectedGroupId) {
-            setError("Select Group");
-            return;
-        }
-
-        const workoutArray = workout
-        .split(",")
-        .map(item => item.trim())
-        .filter(item => item !== "");
-
-        if (workoutArray.length === 0) {
-            setError("Enter at least one valid workout");
-            return;
-        }
+        if (!isWorkoutValid || !isGroupValid) return;
 
         const newWorkout: WorkoutsInterface = {
             id: Math.floor(1000 + Math.random() * 9000),
-            workout: workoutArray,            
-            group: selectedGroupId,
+            workout: workoutList.value
+                .split(",")
+                .map(w => w.trim())
+                .filter(w => w !== ""),
+            group: group.value
+        };
+
+        onAddWorkout(newWorkout);
+        resetForm();
+
+        setSuccess("Workout added successfully");
+        setTimeout(() => setSuccess(""), 5000);
         }
-
-        onAddWorkout(newWorkout)
-        resetForm()
-
-        setSuccess("Workout added successfully")
-        setTimeout(() => {
-            setSuccess("")
-        }, 5000)
-    }
+        
 
     return(
         <>
@@ -67,8 +61,8 @@ export default function WorkoutForm(
              bg-[#bcc8d0] border-2 border-gray-300 rounded-2xl">
                 <label>
                     New Workout: <input
-                    value={workout}
-                    onChange={(e) => setWorkout(e.target.value)} className="border-2 rounded"
+                    value={workoutList.value}
+                    onChange={(e) => workoutList.setValue(e.target.value)} className="border-2 rounded"
                     name="myInput"
                     placeholder=" Workout List (comma)"
                     />
@@ -76,8 +70,8 @@ export default function WorkoutForm(
                 <label>
                     Group:
                     <select
-                        value={selectedGroupId}
-                        onChange={(e) => setSelectedGroupId(e.target.value)}
+                        value={group.value}
+                        onChange={(e) => group.setValue(e.target.value)}
                         className="border-2 rounded p-2 mt-1 w-full"
                         >
                         <option value="">Select Group</option>
@@ -88,9 +82,9 @@ export default function WorkoutForm(
                         ))}
                     </select>
                 </label>
-                {error && (
+                {group.error && (
                     <p className="text-red-600 text-sm font-medium">
-                        {error}
+                        {group.error}
                     </p>
                 )}
                 {success && (
