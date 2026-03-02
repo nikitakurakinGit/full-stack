@@ -1,6 +1,6 @@
 // src/components/footer/Footer.tsx
 
-function Footer({ names }: { names: string[] }) {
+export default function Footer({ names }: { names: string[] }) {
     return (
         <footer className="bg-gray-900 text-white py-6 mt-10">
             <div className="max-w-4xl mx-auto text-center">
@@ -14,5 +14,3 @@ function Footer({ names }: { names: string[] }) {
         </footer>
     );
 }
-
-export default Footer;

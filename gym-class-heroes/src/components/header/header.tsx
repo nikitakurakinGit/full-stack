@@ -1,4 +1,6 @@
-export function Header({
+import Nav from "../nav/nav";
+
+export default function Header({
     projectName,
     projectDescription
 }: {
@@ -6,13 +8,18 @@ export function Header({
     projectDescription: string;
 }) {
     return (
-        <header className="w-auto bg-[#bcc8d0] text-[#0c0e0e] px-6 py-4">
-            <h1 className="text-[2rem] font-bold">
-                {projectName}
-            </h1>
-            <p className="text-base text-[#3e4447] italic">
-                {projectDescription}
-            </p>
+        <header className="flex w-auto bg-gray-900 text-white px-10 py-10 mb-14 sticky top-0 z-50">
+            <div>
+                <h1 className="text-[2rem] font-bold">
+                    {projectName}
+                </h1>
+                <p className="text-base text-gray-300 italic">
+                    {projectDescription}
+                </p>
+            </div>
+            <div className="flex-1 flex justify-end items-center">
+                <Nav/>
+            </div>
         </header>
     );
 }

@@ -1,15 +1,31 @@
+import type { CoachInterface } from "../interface/coachesInterface";
 
+type CoachesProps = {
+        onRemoveCoach: (coach: CoachInterface) => void;
+        coaches: CoachInterface[];
+    }
 
-function Coaches({name, title, athletes}: {name: string, title: string, athletes: string[]}) {
+function Coaches({ coaches, onRemoveCoach }: CoachesProps) {
+
     return (
-        <section className="w-auto bg-[#bcc8d0] text-[#0c0e0e] px-6 py-4">
-            <div>
-                <h4 className="text-lg font-semibold">{name}: </h4>
-                <h5 className="text-m font-medium mb-2">{title}</h5>
-                {athletes.map((athlete, index) => (
-                    <h6 key={index} className="text-base text-[#3e4447] italic">{athlete}</h6>
-                ))}
-            </div>
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w- full max-w-6xl mx-auto p-6">
+            {coaches.map((coach) => (
+                <div className="p-4 rounded shadow-md border border-[#3e4447]" key={coach.id}>
+                    <div className="flex flex-col items-baseline gap-2">
+                        <h4 className="text-lg font-semibold drop-shadow">{coach.name}</h4>
+                        <div>
+                            <span className="text-m font-medium mb-2">{coach.title} | </span>
+                            <span className="text-m font-medium mb-2">{coach.group}</span>
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => onRemoveCoach(coach)}
+                        className="border border-black rounded py-2 px-3 mt-5
+                        bg-white text-sm hover:bg-gray-100 active:scale-95
+                        transition">Remove</button>
+                </div>
+            ))}
         </section>
     )
 }

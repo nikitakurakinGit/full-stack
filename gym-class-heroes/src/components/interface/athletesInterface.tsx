@@ -1,4 +1,4 @@
-export interface Athletes {
+export interface AthletesInterface {
   id: number;
   name: string;
   sport: string;
