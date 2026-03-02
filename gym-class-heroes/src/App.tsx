@@ -1,5 +1,4 @@
 import "./App.css";
-import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import AthletesPage from "./pages/AthletesPage";
 import WorkoutsPage from "./pages/WorkoutsPage";
