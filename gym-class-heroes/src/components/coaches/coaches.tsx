@@ -14,8 +14,8 @@ function Coaches({ coaches, onRemoveCoach }: CoachesProps) {
                     <div className="flex flex-col items-baseline gap-2">
                         <h4 className="text-lg font-semibold drop-shadow">{coach.name}</h4>
                         <div>
-                            <span className="text-m font-medium mb-2">{coach.title} | </span>
-                            <span className="text-m font-medium mb-2">{coach.group}</span>
+                            <span className="text-sm italic mb-2">{coach.title} | </span>
+                            <span className="text-sm italic mb-2">{coach.group}</span>
                         </div>
                     </div>
                     <button
@@ -23,7 +23,7 @@ function Coaches({ coaches, onRemoveCoach }: CoachesProps) {
                         onClick={() => onRemoveCoach(coach)}
                         className="border border-black rounded py-2 px-3 mt-5
                         bg-white text-sm hover:bg-gray-100 active:scale-95
-                        transition">Remove</button>
+                        transition">Remove Coach</button>
                 </div>
             ))}
         </section>
