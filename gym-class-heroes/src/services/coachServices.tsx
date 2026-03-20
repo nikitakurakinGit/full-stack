@@ -26,27 +26,7 @@ export function validateGroup(group: string) {
     return null;
 }
 
-export async function createCoach({id, name, title, group}: CoachInterface) {
-    
-    
-    const nameErr = validateCoachName(name);
-    if(nameErr) return nameErr;
 
-    const titleErr = validateCoachTitle(title);
-    if(titleErr) return titleErr;
-
-    const groupErr = validateGroup(group);
-    if(groupErr) return groupErr;
-
-    const newCoach: CoachInterface = {
-        id: id,
-        name: name,
-        title: title,
-        group: group
-    }
-
-    return coachServices.createCoach(newCoach)
-}
 
 export async function deleteCoach(coachId: number) {
     console.log("deleteCoach service ran")
