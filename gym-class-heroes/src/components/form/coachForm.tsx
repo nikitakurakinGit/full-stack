@@ -3,17 +3,18 @@ import { useFormInput } from "../../hooks/useFormInput";
 import * as coachService from '../../services/coachServices';
 import * as coachRepo from '../../apis/coachesRepo';
 import type { CoachInterface } from "../interface/coachesInterface";
-import type { GroupsInterface } from "../interface/groupsInterface";
+import { useGroupContext } from "../../hooks/useGroupContext";
 
 //I think this form should be on a click basis. Like its just a button that says add coach and the form pops up middle of the screen and blanks out the background. Shouldnt be too hard.
 
 type FormProp = {
     onAddCoach: (
     coach: CoachInterface) => void;
-    groups: GroupsInterface[];
 }
 
-export default function Form({ onAddCoach, groups }: FormProp) {
+export default function Form({ onAddCoach}: FormProp) {
+    const { groups } = useGroupContext();
+    
     const name = useFormInput("", (value) => {
         return coachService.validateCoachName(value)
     })

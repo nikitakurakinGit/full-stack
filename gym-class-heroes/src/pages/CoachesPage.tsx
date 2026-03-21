@@ -5,12 +5,10 @@ import type { CoachInterface } from '../components/interface/coachesInterface';
 import Form from '../components/form/coachForm';
 import * as coachServices from '../services/coachServices';
 import * as coachRepo from '../apis/coachesRepo';
-import { useGroupData } from '../hooks/useGroupData';
+
 
 export default function CoachesPage() {
     const [coaches, setCoaches] = useState<CoachInterface[]>(coachData)
-    const { groups, error, addToGroup, removeFromGroup } = useGroupData();
-    //hold group data in state here
 
     useEffect(() => {
         const fetchCoaches = async () => {
@@ -46,10 +44,8 @@ export default function CoachesPage() {
                 onRemoveCoach={onRemoveCoach}/>
                 
                 <Form
-                onAddCoach={onAddCoach}
-                groups={groups}/>
-            </div>
-            
+                onAddCoach={onAddCoach}/>
+            </div> 
         </>
     )
 }
