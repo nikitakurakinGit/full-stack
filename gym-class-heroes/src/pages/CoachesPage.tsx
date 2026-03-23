@@ -4,6 +4,7 @@ import { coachData } from '../data/coachData';
 import type { CoachInterface } from '../components/interface/coachesInterface';
 import Form from '../components/form/coachForm';
 import * as coachServices from '../services/coachServices';
+import * as coachRepo from '../apis/coachesRepo';
 import { useGroupData } from '../hooks/useGroupData';
 
 export default function CoachesPage() {
@@ -20,30 +21,17 @@ export default function CoachesPage() {
     }, [])
 
 
-    const onAddCoach = async (newCoach: CoachInterface) => {
-        try {
-            const createdCoach = await coachServices.createCoach(newCoach)
-
-            if(typeof createdCoach === "string") {
-                console.error(createdCoach)
-                return 
-            }
-
-            setCoaches(prev => [...prev, createdCoach])
-            addToGroup(newCoach.group, "coachesById", newCoach.id)
-        } catch (error) {
-            console.error(error)
-        }
+    const onAddCoach = async (newCoach: CoachInterface) => {        
+        setCoaches(prev => [...prev, newCoach])
     }
 
     const onRemoveCoach = async (coach: CoachInterface) => {
         try{
             console.log("remove coach ran from coaches page")
-            const deletedCoachId = await coachServices.deleteCoach(coach.id)
+            
+            await coachRepo.deleteCoach(coach.id);
 
-            removeFromGroup(coach.group, "coachesById", coach.id)
-
-            setCoaches(prev => prev.filter(coach => coach.id !== deletedCoachId))
+            setCoaches(prev => prev.filter(c => c.id !== coach.id))
 
         } catch (error) {
             console.error(error)
