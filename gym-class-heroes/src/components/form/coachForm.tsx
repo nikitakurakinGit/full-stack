@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useFormInput } from "../../hooks/useFormInput";
 import * as coachService from '../../services/coachServices';
+import * as coachRepo from '../../apis/coachesRepo';
 import type { CoachInterface } from "../interface/coachesInterface";
 import type { GroupsInterface } from "../interface/groupsInterface";
 
@@ -27,6 +28,7 @@ export default function Form({ onAddCoach, groups }: FormProp) {
 
 
     const [success, setSuccess] = useState("");
+    const [serverError, setServerError] = useState("");
 
     function resetForm(){
         name.reset()
@@ -36,7 +38,7 @@ export default function Form({ onAddCoach, groups }: FormProp) {
     }
 
     
-    function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
         const isNameValid = name.validate()
@@ -46,16 +48,21 @@ export default function Form({ onAddCoach, groups }: FormProp) {
         
         if(!isNameValid || !isTitleValid || !isGroupValid) return;
 
-        const coachId: number = Math.floor(1000 + Math.random() * 9000)
-
-        const newCoach = {
-            id: coachId,
+        const coachPayload = {
             name: name.value,
             title: title.value,
             group: group.value
         }
         
-        onAddCoach(newCoach)
+        try {
+            const newCoach = await coachRepo.createCoach(coachPayload);
+            
+            onAddCoach(newCoach);
+            
+        } catch(error: any) {
+            setServerError(error.message)
+        }
+
         resetForm()
 
         setSuccess("Coach added successfully")
@@ -81,6 +88,11 @@ export default function Form({ onAddCoach, groups }: FormProp) {
                             {name.error}
                         </p>
                         )}
+                        {serverError && (
+                            <p className="text-red-600 text-sm font-medium mt-2">
+                            {serverError}
+                        </p>
+                        )}
                     </div>
                 </label>
                 <label>
@@ -94,6 +106,11 @@ export default function Form({ onAddCoach, groups }: FormProp) {
                         {title.error && (
                         <p className="text-red-600 text-sm font-medium">
                             {title.error}
+                        </p>
+                        )}
+                        {serverError && (
+                            <p className="text-red-600 text-sm font-medium mt-2">
+                            {serverError}
                         </p>
                         )}
                     </div>
@@ -116,6 +133,11 @@ export default function Form({ onAddCoach, groups }: FormProp) {
                         {group.error && (
                         <p className="text-red-600 text-sm font-medium">
                             {group.error}
+                        </p>
+                        )}
+                        {serverError && (
+                            <p className="text-red-600 text-sm font-medium mt-2">
+                            {serverError}
                         </p>
                         )}
                     </div>
