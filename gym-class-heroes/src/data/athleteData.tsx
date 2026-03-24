@@ -4,71 +4,71 @@ export const athleteData: AthletesInterface[] = [
   {
     id: 1,
     name: "Hoang Son Nguyen",
-    sport: "Soccer",
     experience: "Advanced",
     status: "Active",
+    group: "Soccer"
   },
   {
     id: 2,
     name: "Nikita Kurakin",
-    sport: "Basketball",
     experience: "Intermediate",
     status: "Inactive",
+    group: "Rugby"
   },
   {
     id: 3,
     name: "Faith Hilarde",
-    sport: "Wrestling",
     experience: "Beginner",
     status: "Injured",
+    group: "Hockey"
   },
   {
     id: 4,
     name: "Ava Thompson",
-    sport: "Volleyball",
     experience: "Intermediate",
     status: "Active",
+    group: "Soccer"
   },
   {
     id: 5,
     name: "Liam Chen",
-    sport: "Badminton",
     experience: "Advanced",
     status: "Active",
+    group: "Rugby"
   },
   {
     id: 6,
     name: "Sophia Martinez",
-    sport: "Swimming",
     experience: "Beginner",
     status: "Inactive",
+    group: "Hockey"
   },
   {
     id: 7,
     name: "Ethan Patel",
-    sport: "Track",
     experience: "Intermediate",
     status: "Active",
+    group: "Soccer"
   },
   {
     id: 8,
     name: "Mia Johnson",
-    sport: "Tennis",
     experience: "Advanced",
     status: "Injured",
+    group: "Rugby"
   },
   {
     id: 9,
     name: "Noah Williams",
-    sport: "Hockey",
     experience: "Beginner",
     status: "Active",
+    group: "Hockey"
   },
   {
     id: 10,
     name: "Isabella Garcia",
-    sport: "Gymnastics",
     experience: "Advanced",
     status: "Inactive",
+    group: "Soccer"
   }
 ];
