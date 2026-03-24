@@ -6,6 +6,7 @@ import AthleteForm from "../components/form/athleteForm";
 
 import { useGroupData } from "../hooks/useGroupData";
 import type { AthletesInterface } from "../components/interface/athletesInterface";
+import { Modal } from "../components/layout/modal";
 
 export default function AthletesPage() {
   /**
@@ -33,7 +34,7 @@ export default function AthletesPage() {
     fetchAthletes();
   }, []);
 
-  // ADD ATHLETE (group is now a NAME)
+  // ADD ATHLETE 
   const onAddAthlete = async (newAthlete: AthletesInterface) => {
     try {
       const createdAthlete = await athleteService.createAthlete(newAthlete);
@@ -62,6 +63,26 @@ export default function AthletesPage() {
 
   return (
     <div className="flex flex-col w-full px-6 py-4 mx-auto">
+      {/* ADD ATHLETE BUTTONS */}
+      <div className="flex justify-left gap-4">
+        <button
+          onClick={() => setShowForm(prev => !prev)}
+          className="bg-[#222527] text-white font-bold px-4 py-2 rounded-lg hover:bg-[#5e656a]"
+        >
+          {showForm ? "Close Form" : "Add Athlete"}
+        </button>
+      </div>
+
+      {/* ATHLETE FORM */}
+      {showForm && (
+        <Modal onClose={() => setShowForm(false)}>
+          <AthleteForm
+            addAthlete={onAddAthlete}
+            groupsData={groups}
+          />
+        </Modal>
+      )}
+
       {/**
        * AthleteList Component
        *
@@ -74,24 +95,6 @@ export default function AthletesPage() {
         groupsData={groups}
         onRemoveAthlete={onRemoveAthlete}
       />
-      
-      {/* ADD ATHLETE BUTTONS */}
-      <div className="flex justify-center gap-4 mt-10">
-        <button
-          onClick={() => setShowForm(prev => !prev)}
-          className="bg-[#222527] text-white font-bold px-4 py-2 rounded-lg hover:bg-[#5e656a]"
-        >
-          {showForm ? "Close Form" : "Add Athlete"}
-        </button>
-      </div>
-
-      {/* ATHLETE FORM */}
-      {showForm && (
-        <AthleteForm
-          addAthlete={onAddAthlete}
-          groupsData={groups}
-        />
-      )}
 
       {error && (
         <p className="text-red-600 text-sm mt-2">{error}</p>

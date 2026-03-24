@@ -13,12 +13,8 @@ export default function AthleteList({
   onRemoveAthlete,
 }: AthleteListProps) {
   return (
-  <ul className="
-    grid 
-    grid-cols-[repeat(auto-fit,minmax(250px,1fr))] 
-    gap-6 
-    p-6
-    ">
+  <ul className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 pt-10">
+
       {athletes.map((athlete) => {
         // filter athlete from groupsData
         const athleteGroup = groupsData.find(
@@ -28,26 +24,28 @@ export default function AthleteList({
         return (
           <li
             key={athlete.id}
-            className=" text-[#0c0e0e] p-5 rounded-lg shadow-md border border-[#3e4447]"
+            className=" text-[#0c0e0e] p-5 rounded-lg shadow-lg border border-gray-900"
           >
             <div>
-              <p className="font-semibold text-lg">{athlete.name}</p>
-              <p className="text-sm italic">
+              <div className="flex justify-between items-start">
+                <p className="truncate max-w-full font-semibold text-lg">{athlete.name}</p>
+
+                <button
+                  type="button"
+                  onClick={() => onRemoveAthlete(athlete)}
+                  className="bg-[#848e94] text-white text-sm px-3 py-1 rounded-md hover:bg-[#5e656a]"
+                >
+                  X
+                </button>
+              </div>
+              <p className="text-md italic">
                 {athlete.experience} | {athlete.status}
               </p>
 
-              <p className="text-sm font-semibold pb-3">
+              <p className="text-md font-semibold pb-3">
                 Group: {athleteGroup ? athleteGroup.name : "None"}
               </p>
             </div>
-
-            <button
-              type="button"
-              onClick={() => onRemoveAthlete(athlete)}
-              className="bg-[#848e94] text-white text-sm px-3 py-1 rounded-md hover:bg-[#5e656a]"
-            >
-              Remove Athlete
-            </button>
           </li>
         );
       })}

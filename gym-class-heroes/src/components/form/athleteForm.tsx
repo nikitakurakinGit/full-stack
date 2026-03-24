@@ -74,7 +74,7 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
     >
       <h2 className="flex font-bold text-[22px] mb-5 justify-center">Add New Athlete</h2>
 
-      <label className="block">
+      <label className="block pb-2">
         Name:
         <input
           value={name.value}
@@ -82,11 +82,11 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
           className="border rounded-md p-1 m-1 text-black"
           placeholder="Athlete Name"
         />
+        {name.error && <p className="text-red-600 text-sm">{name.error}</p>}
+
       </label>
 
-      {name.error && <p className="text-red-600 text-sm">{name.error}</p>}
-
-      <label className="block">
+      <label className="block pb-2">
         Experience:
         <select
           value={experience.value}
@@ -103,13 +103,14 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
           <option value="Intermediate" className="text-black">Intermediate</option>
           <option value="Advanced" className="text-black">Advanced</option>
         </select>
-      </label>
-      
-      {experience.error && (
-        <p className="text-red-600 text-sm">{experience.error}</p>
-      )}
 
-      <label className="block">
+        {experience.error && (
+          <p className="text-red-600 text-sm">{experience.error}</p>
+        )}
+
+      </label>
+
+      <label className="block pb-2">
         Status:
         <select
           value={status.value}
@@ -126,13 +127,13 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
           <option value="Inactive" className="text-black">Inactive</option>
           <option value="Injured" className="text-black">Injured</option>
         </select>
-      </label>
-      
-      {status.error && (
-        <p className="text-red-600 text-sm">{status.error}</p>
-      )}
 
-      <label className="block">
+        {status.error && (
+          <p className="text-red-600 text-sm">{status.error}</p>
+        )}
+      </label>
+
+      <label className="block pb-2">
         Group:
         <select
           value={selectedGroup.value}
@@ -150,11 +151,11 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
             </option>
           ))}
         </select>
+        
+        {selectedGroup.error && (
+          <p className="text-red-600 text-sm">{selectedGroup.error}</p>
+        )}
       </label>
-
-      {selectedGroup.error && (
-        <p className="text-red-600 text-sm">{selectedGroup.error}</p>
-      )}
 
       {success && <p className="text-green-600 text-sm">{success}</p>}
 
