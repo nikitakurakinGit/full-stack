@@ -5,8 +5,6 @@ import * as coachRepo from '../../apis/coachesRepo';
 import type { CoachInterface } from "../interface/coachesInterface";
 import { useGroupContext } from "../../hooks/useGroupContext";
 
-//I think this form should be on a click basis. Like its just a button that says add coach and the form pops up middle of the screen and blanks out the background. Shouldnt be too hard.
-
 type FormProp = {
     onAddCoach: (
     coach: CoachInterface) => void;
@@ -23,7 +21,7 @@ export default function Form({ onAddCoach}: FormProp) {
         return coachService.validateCoachTitle(value)
     })
 
-    const group = useFormInput("", (value) => {
+    const groupId = useFormInput("", (value) => {
         return coachService.validateGroup(value)
     })
 
@@ -34,7 +32,7 @@ export default function Form({ onAddCoach}: FormProp) {
     function resetForm(){
         name.reset()
         title.reset()
-        group.reset()
+        groupId.reset()
         setSuccess("")    
     }
 
@@ -44,7 +42,7 @@ export default function Form({ onAddCoach}: FormProp) {
 
         const isNameValid = name.validate()
         const isTitleValid = title.validate()
-        const isGroupValid = group.validate()
+        const isGroupValid = groupId.validate()
 
         
         if(!isNameValid || !isTitleValid || !isGroupValid) return;
@@ -52,7 +50,7 @@ export default function Form({ onAddCoach}: FormProp) {
         const coachPayload = {
             name: name.value,
             title: title.value,
-            group: group.value
+            groupId: Number(groupId.value)
         }
         
         try {
@@ -119,21 +117,21 @@ export default function Form({ onAddCoach}: FormProp) {
                 <label>
                     Group: 
                     <select
-                        value={group.value}
-                        onChange={(e) => group.setValue(e.target.value)}
+                        value={groupId.value}
+                        onChange={(e) => groupId.setValue(e.target.value)}
                         className="border-2 rounded p-1 m-2 text-black"
                     >
                         <option value="">Select Group</option>
                         {groups.map(group => (
-                            <option key={group.id} value={group.name}>
+                            <option key={group.id} value={group.id}>
                                 {group.name}
                             </option>
                         ))}
                     </select>
                     <div className="flex items-center justify-center mt-3">
-                        {group.error && (
+                        {groupId.error && (
                         <p className="text-red-600 text-sm font-medium">
-                            {group.error}
+                            {groupId.error}
                         </p>
                         )}
                         {serverError && (

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Coaches from "../components/coaches/coaches";
-import { coachData } from '../data/coachData';
 import type { CoachInterface } from '../components/interface/coachesInterface';
 import Form from '../components/form/coachForm';
 import * as coachServices from '../services/coachServices';
@@ -8,7 +7,7 @@ import * as coachRepo from '../apis/coachesRepo';
 
 
 export default function CoachesPage() {
-    const [coaches, setCoaches] = useState<CoachInterface[]>(coachData)
+    const [coaches, setCoaches] = useState<CoachInterface[]>([])
 
     useEffect(() => {
         const fetchCoaches = async () => {
@@ -45,7 +44,8 @@ export default function CoachesPage() {
                 
                 <Form
                 onAddCoach={onAddCoach}/>
-            </div> 
+            </div>
+            
         </>
     )
 }
