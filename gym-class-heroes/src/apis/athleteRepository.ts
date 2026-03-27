@@ -1,3 +1,4 @@
+import type { AthleteDTO } from "../components/interface/athleteDTO";
 import type { AthletesInterface } from "../components/interface/athletesInterface";
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -15,32 +16,21 @@ export async function fetchAthletes(): Promise<AthletesInterface[]> {
 }
 
 // CREATE athlete
-export async function createAthlete({
-  name,
-  experience,
-  status,
-  groupId
-}: {
-  name: string;
-  experience: string;
-  status: string;
-  groupId: number;
-}): Promise<AthletesInterface> {
+export async function createAthlete({ name, experience, status, groupId }: AthleteDTO) {
   const res = await fetch(`${API_URL}/athletes`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "content-Type": "application/json",
     },
     body: JSON.stringify({ name, experience, status, groupId })
   });
 
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.error || "Failed to create athlete");
+    throw new Error(error.error);
   }
 
-  const data: AthletesInterface = await res.json();
-  return data;
+  return await res.json();
 }
 
 // DELETE athlete
