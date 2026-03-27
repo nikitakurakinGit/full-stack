@@ -46,7 +46,6 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
     const validExperience = experience.validate();
     const validStatus = status.validate();
 
-
     if (!validName || !validExperience || !validStatus || !validGroup) return;
 
     const athleteId = Math.floor(1000 + Math.random() * 9000);
@@ -56,8 +55,15 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
       name: name.value,
       experience: experience.value as "Beginner" | "Intermediate" | "Advanced",
       status: status.value as "Active" | "Inactive" | "Injured",
-      group: selectedGroup.value
+      groupId: selectedGroup.value
     };
+
+    const dto = {
+      ...newAthlete,
+      groupId: Number(newAthlete.groupId)  
+    };
+
+    athleteService.createAthlete(dto);
 
     addAthlete(newAthlete);
 
@@ -146,7 +152,7 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
           </option>
 
           {groupsData.map((g) => (
-            <option key={g.id} value={g.name} className="text-black">
+            <option key={g.id} value={g.id} className="text-black">
               {g.name}
             </option>
           ))}

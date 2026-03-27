@@ -11,13 +11,13 @@ export async function fetchCoaches(): Promise<CoachInterface[]>{
     return data;
 }
 
-export async function createCoach({name, title, group}: CoachDTO): Promise<CoachInterface> {
+export async function createCoach({name, title, groupId}: CoachDTO): Promise<CoachInterface> {
     const res = await fetch(`${API_URL}/coaches`, {
         method: "POST",
         headers: {
             "content-Type": "application/json",
         },
-        body: JSON.stringify({name, title, group})
+        body: JSON.stringify({name, title, groupId})
     });
 
     if(!res.ok){
@@ -30,6 +30,7 @@ export async function createCoach({name, title, group}: CoachDTO): Promise<Coach
 }
 
 export async function deleteCoach(coachId: number): Promise<void> {
+    console.log(API_URL)
     const res = await fetch(`${API_URL}/coaches/${coachId}`, {
         method: "DELETE"
     });
