@@ -1,62 +1,57 @@
-import { workoutData } from "../data/workoutData";
+import type { WorkoutDTO } from "../components/interface/workoutDTO";
 import type { WorkoutsInterface } from "../components/interface/workoutsInterface";
 
-// Get all workouts
-export function fetchWorkouts(): WorkoutsInterface[] {
-    return workoutData;
+const API_URL = import.meta.env.VITE_API_URL;
+
+
+// Fetch all workouts
+export async function fetchWorkouts(): Promise<WorkoutsInterface[]> {
+    const res = await fetch(`${API_URL}/workouts`);
+
+    const data: WorkoutsInterface[] = await res.json();
+
+    return data;
 }
 
-// Get workout by ID
-export function getWorkoutById(id: number): WorkoutsInterface {
-    const foundWorkout = workoutData.find(w => w.id === id);
 
-    if (!foundWorkout) {
-        throw new Error(`Failed to fetch workout with id ${id}`);
+// Create workout
+export async function createWorkout({ workout, groupId }: WorkoutDTO): Promise<WorkoutsInterface> {
+
+    const res = await fetch(`${API_URL}/workouts`, {
+        method: "POST",
+        headers: {
+            "content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            workout,
+            groupId
+        })
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error);
     }
 
-    return foundWorkout;
+    const data: WorkoutsInterface = await res.json();
+
+    return data;
 }
 
-// Create a new workout
-export function createWorkout({id, workout, group}: WorkoutsInterface): WorkoutsInterface {
 
-    const newWorkout: WorkoutsInterface = {
-        id,
-        workout,
-        group
-    };
+export async function deleteWorkout(workoutId: number): Promise<void> {
 
-    workoutData.push(newWorkout);
+    console.log(API_URL);
 
-    return newWorkout;
-}
-
-// Update an existing workout
-export function updateWorkout(
-    updatedWorkout: WorkoutsInterface
-): WorkoutsInterface {
-    const index = workoutData.findIndex(
-        w => w.id === updatedWorkout.id
+    const res = await fetch(
+        `${API_URL}/workouts/${workoutId}`,
+        {
+            method: "DELETE"
+        }
     );
 
-    if (index === -1) {
-        throw new Error(
-            `Failed to update workout with id ${updatedWorkout.id}`
-        );
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error);
     }
-
-    workoutData[index] = updatedWorkout;
-    return workoutData[index];
-}
-
-// Delete a workout
-export function deleteWorkout(id: number): number {
-    const index = workoutData.findIndex(w => w.id === id);
-
-    if (index === -1) {
-        throw new Error(`Failed to delete workout with id ${id}`);
-    }
-
-    workoutData.splice(index, 1);
-    return id;
 }
