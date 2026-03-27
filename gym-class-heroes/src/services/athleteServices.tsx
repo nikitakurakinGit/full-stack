@@ -25,8 +25,8 @@ export function validateStatus(status: string) {
   return null;
 }
 
-export function validateGroup(group: string) {
-  if (!group.trim()) return "Select a group";
+export function validateGroupId(groupId: number) {
+  if (!groupId || isNaN(groupId)) return "Select a group";
   return null;
 }
 
@@ -41,24 +41,19 @@ export async function createAthlete(dto: AthletesInterface) {
   const statusErr = validateStatus(dto.status);
   if (statusErr) return statusErr;
 
-  const groupErr = validateGroup(dto.groupId);
+  const groupErr = validateGroupId(Number(dto.groupId));
   if (groupErr) return groupErr;
-
-  const groupId = Number(dto.groupId);
-
-  if (isNaN(groupId)) {
-    return "Invalid group selected";
-  }
 
   const athleteDTO = {
     name: dto.name,
     experience: dto.experience,
     status: dto.status,
-    groupId: groupId
+    groupId: Number(dto.groupId)
   };
 
   return AthleteRepo.createAthlete(athleteDTO);
 }
+
 
 // DELETE ATHLETE
 export async function deleteAthlete(athleteId: number) {

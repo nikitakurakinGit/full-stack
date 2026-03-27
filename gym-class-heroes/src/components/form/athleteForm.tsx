@@ -58,13 +58,7 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
       groupId: selectedGroup.value
     };
 
-    const dto = {
-      ...newAthlete,
-      groupId: Number(newAthlete.groupId)  
-    };
-
-    athleteService.createAthlete(dto);
-
+    athleteService.createAthlete(newAthlete);
     addAthlete(newAthlete);
 
     resetForm();
