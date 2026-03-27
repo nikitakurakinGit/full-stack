@@ -1,59 +1,56 @@
-import { athleteData } from "../data/athleteData";
 import type { AthletesInterface } from "../components/interface/athletesInterface";
+const API_URL = import.meta.env.VITE_API_URL;
 
-// Get all athletes
-export function fetchAthletes(): AthletesInterface[] {
-  return athleteData;
-}
+// GET all athletes
+export async function fetchAthletes(): Promise<AthletesInterface[]> {
+  const res = await fetch(`${API_URL}/athletes`);
 
-// Get athlete by ID
-export function getAthleteById(id: number): AthletesInterface {
-  const foundAthlete = athleteData.find(athlete => athlete.id === id);
-
-  if (!foundAthlete) {
-    throw new Error(`Failed to fetch athlete with id ${id}`);
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Failed to fetch athletes");
   }
 
-  return foundAthlete;
+  const data: AthletesInterface[] = await res.json();
+  return data;
 }
 
-// Create a new athlete
-export function createAthlete({ id, name, sport, experience, status }: AthletesInterface) {
-  const newAthlete: AthletesInterface = {
-      id: id,
-      name: name,
-      sport: sport,
-      experience: experience,
-      status: status
-  };
+// CREATE athlete
+export async function createAthlete({
+  name,
+  experience,
+  status,
+  groupId
+}: {
+  name: string;
+  experience: string;
+  status: string;
+  groupId: number;
+}): Promise<AthletesInterface> {
+  const res = await fetch(`${API_URL}/athletes`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ name, experience, status, groupId })
+  });
 
-  athleteData.push(newAthlete);
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Failed to create athlete");
+  }
 
-  return newAthlete;
+  const data: AthletesInterface = await res.json();
+  return data;
 }
 
-// Update an existing athlete
-export function updateAthlete(
-    updatedAthlete: AthletesInterface
-): AthletesInterface {
-    const index = athleteData.findIndex(athlete => athlete.id === updatedAthlete.id);
+// DELETE athlete
+export async function deleteAthlete(athleteId: number): Promise<void> {
+  const res = await fetch(`${API_URL}/athletes/${athleteId}`, {
+    method: "DELETE"
+  });
 
-    if (index === -1) {
-        throw new Error(`Failed to update athlete with id ${updatedAthlete.id}`);
-    }
-
-    athleteData[index] = updatedAthlete;
-    return athleteData[index];
-}
-
-// Delete an athlete
-export function deleteAthlete(id: number): boolean {
-    const index = athleteData.findIndex(athlete => athlete.id === id);
-
-    if (index === -1) {
-        throw new Error(`Failed to delete athlete with id ${id}`);
-    }
-
-    athleteData.splice(index, 1);
-    return true;
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Failed to delete athlete");
+  }
 }
