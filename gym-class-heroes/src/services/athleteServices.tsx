@@ -43,7 +43,20 @@ export async function createAthlete(athlete: AthletesInterface) {
   const groupErr = validateGroup(athlete.group);
   if (groupErr) return groupErr;
 
-  return AthleteRepo.createAthlete(athlete);
+  const groupId = Number(athlete.group);
+
+  if (isNaN(groupId)) {
+    return "Invalid group selected";
+  }
+
+  const athleteDTO = {
+    name: athlete.name,
+    experience: athlete.experience,
+    status: athlete.status,
+    groupId: groupId
+  };
+
+  return AthleteRepo.createAthlete(athleteDTO);
 }
 
 // DELETE ATHLETE
