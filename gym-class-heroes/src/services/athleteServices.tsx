@@ -31,7 +31,7 @@ export function validateGroup(group: string) {
 }
 
 // CREATE ATHLETE
-export async function createAthlete(dto: any) {
+export async function createAthlete(dto: AthletesInterface) {
   const nameErr = validateAthleteName(dto.name);
   if (nameErr) return nameErr;
 
@@ -41,27 +41,23 @@ export async function createAthlete(dto: any) {
   const statusErr = validateStatus(dto.status);
   if (statusErr) return statusErr;
 
-  const groupErr = validateGroup(String(dto.groupId));
+  const groupErr = validateGroup(dto.groupId);
   if (groupErr) return groupErr;
 
-<<<<<<< HEAD
-  const groupId = Number(athlete.group);
+  const groupId = Number(dto.groupId);
 
   if (isNaN(groupId)) {
     return "Invalid group selected";
   }
 
   const athleteDTO = {
-    name: athlete.name,
-    experience: athlete.experience,
-    status: athlete.status,
+    name: dto.name,
+    experience: dto.experience,
+    status: dto.status,
     groupId: groupId
   };
 
   return AthleteRepo.createAthlete(athleteDTO);
-=======
-  return AthleteRepo.createAthlete(dto);
->>>>>>> f9076d9c24e5b951bf5572b7736035b296d16af4
 }
 
 // DELETE ATHLETE
