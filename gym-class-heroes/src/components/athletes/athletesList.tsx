@@ -13,22 +13,23 @@ export default function AthleteList({
   onRemoveAthlete,
 }: AthleteListProps) {
   return (
-  <ul className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 pt-10">
+    <ul className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 pt-10">
 
       {athletes.map((athlete) => {
-        // filter athlete from groupsData
         const athleteGroup = groupsData.find(
-          (group) => group.name === athlete.group,
+          (group) => group.id === athlete.groupId
         );
 
         return (
           <li
             key={athlete.id}
-            className=" text-[#0c0e0e] p-5 rounded-lg shadow-lg border border-gray-900"
+            className="text-[#0c0e0e] p-5 rounded-lg shadow-lg border border-gray-900"
           >
             <div>
               <div className="flex justify-between items-start">
-                <p className="truncate max-w-full font-semibold text-lg">{athlete.name}</p>
+                <p className="truncate max-w-full font-semibold text-lg">
+                  {athlete.name}
+                </p>
 
                 <button
                   type="button"
@@ -38,6 +39,7 @@ export default function AthleteList({
                   X
                 </button>
               </div>
+
               <p className="text-md italic">
                 {athlete.experience} | {athlete.status}
               </p>
@@ -49,6 +51,7 @@ export default function AthleteList({
           </li>
         );
       })}
+
     </ul>
   );
 }

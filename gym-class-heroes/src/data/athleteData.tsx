@@ -1,4 +1,4 @@
-import type { AthletesInterface } from '../components/interface/athletesInterface';
+import type { AthletesInterface } from "../components/interface/athletesInterface";
 
 export const athleteData: AthletesInterface[] = [
   {
@@ -6,69 +6,69 @@ export const athleteData: AthletesInterface[] = [
     name: "Hoang Son Nguyen",
     experience: "Advanced",
     status: "Active",
-    group: "Soccer"
+    groupId: "A", // Soccer
   },
   {
     id: 2,
     name: "Nikita Kurakin",
     experience: "Intermediate",
     status: "Inactive",
-    group: "Rugby"
+    groupId: "B", // Rugby
   },
   {
     id: 3,
     name: "Faith Hilarde",
     experience: "Beginner",
     status: "Injured",
-    group: "Hockey"
+    groupId: "C", // Hockey
   },
   {
     id: 4,
     name: "Ava Thompson",
     experience: "Intermediate",
     status: "Active",
-    group: "Soccer"
+    groupId: "A",
   },
   {
     id: 5,
     name: "Liam Chen",
     experience: "Advanced",
     status: "Active",
-    group: "Rugby"
+    groupId: "B",
   },
   {
     id: 6,
     name: "Sophia Martinez",
     experience: "Beginner",
     status: "Inactive",
-    group: "Hockey"
+    groupId: "C",
   },
   {
     id: 7,
     name: "Ethan Patel",
     experience: "Intermediate",
     status: "Active",
-    group: "Soccer"
+    groupId: "A",
   },
   {
     id: 8,
     name: "Mia Johnson",
     experience: "Advanced",
     status: "Injured",
-    group: "Rugby"
+    groupId: "B",
   },
   {
     id: 9,
     name: "Noah Williams",
     experience: "Beginner",
     status: "Active",
-    group: "Hockey"
+    groupId: "C",
   },
   {
     id: 10,
     name: "Isabella Garcia",
     experience: "Advanced",
     status: "Inactive",
-    group: "Soccer"
-  }
+    groupId: "A",
+  },
 ];

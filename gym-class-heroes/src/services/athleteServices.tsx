@@ -2,8 +2,9 @@ import * as AthleteRepo from "../apis/athleteRepository";
 import type { AthletesInterface } from "../components/interface/athletesInterface";
 
 // FETCH ATHLETES
-export async function fetchAthletes() {
-  return AthleteRepo.fetchAthletes();
+export async function fetchAthletes(): Promise<AthletesInterface[]> {
+  const athletes = await AthleteRepo.fetchAthletes();
+  return athletes;
 }
 
 // VALIDATION HELPERS
@@ -30,20 +31,20 @@ export function validateGroup(group: string) {
 }
 
 // CREATE ATHLETE
-export async function createAthlete(athlete: AthletesInterface) {
-  const nameErr = validateAthleteName(athlete.name);
+export async function createAthlete(dto: any) {
+  const nameErr = validateAthleteName(dto.name);
   if (nameErr) return nameErr;
 
-  const expErr = validateExperience(athlete.experience);
+  const expErr = validateExperience(dto.experience);
   if (expErr) return expErr;
 
-  const statusErr = validateStatus(athlete.status);
+  const statusErr = validateStatus(dto.status);
   if (statusErr) return statusErr;
 
-  const groupErr = validateGroup(athlete.group);
+  const groupErr = validateGroup(String(dto.groupId));
   if (groupErr) return groupErr;
 
-  return AthleteRepo.createAthlete(athlete);
+  return AthleteRepo.createAthlete(dto);
 }
 
 // DELETE ATHLETE
