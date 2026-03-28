@@ -4,6 +4,7 @@ import * as coachService from '../../services/coachServices';
 import * as coachRepo from '../../apis/coachesRepo';
 import type { CoachInterface } from "../interface/coachesInterface";
 import { useGroupContext } from "../../hooks/useGroupContext";
+import type { CoachDTO } from "../interface/coachDTO";
 
 type FormProp = {
     onAddCoach: (
@@ -47,7 +48,7 @@ export default function Form({ onAddCoach}: FormProp) {
         
         if(!isNameValid || !isTitleValid || !isGroupValid) return;
 
-        const coachPayload = {
+        const coachPayload: CoachDTO = {
             name: name.value,
             title: title.value,
             groupId: Number(groupId.value)
@@ -73,48 +74,45 @@ export default function Form({ onAddCoach}: FormProp) {
 
     return(
         <>
-            <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center bg-[#222527] text-white shadow-md rounded gap-5 p-5 mt-20 w-full max-w-xl mx-auto">
-                <label>
+            <form onSubmit={handleSubmit} className="bg-[#222527] text-white shadow-md rounded-lg m-10 p-10 max-w-md mx-auto">
+                <h2 className="flex font-bold text-[22px] mb-5 justify-center">Add New Coach</h2>
+                <label className="block pb-2">
                     Name: <input
                     value={name.value}
-                    onChange={(e) => name.setValue(e.target.value)} className="border-2 rounded text-black"
+                    onChange={(e) => name.setValue(e.target.value)} className="border rounded-md p-1 m-2 text-black"
                     name="myInput"
                     placeholder=" Coach name"/>
                     
-                    <div className="flex items-center justify-center mt-3">
-                        {name.error && (
-                        <p className="text-red-600 text-sm font-medium">
-                            {name.error}
-                        </p>
-                        )}
-                        {serverError && (
-                            <p className="text-red-600 text-sm font-medium mt-2">
-                            {serverError}
-                        </p>
-                        )}
-                    </div>
+                    {name.error && (
+                    <p className="text-red-600 text-sm font-medium">
+                        {name.error}
+                    </p>
+                    )}
+                    {serverError && (
+                        <p className="text-red-600 text-sm font-medium mt-2">
+                        {serverError}
+                    </p>
+                    )}
                 </label>
-                <label>
+                <label className="block pb-2">
                     Title: <input
                     value={title.value}
-                    onChange={(e) => title.setValue(e.target.value)} className="border-2 rounded text-black"
+                    onChange={(e) => title.setValue(e.target.value)} className="border rounded-md p-1 m-2 text-black"
                     name="myInput"
                     placeholder=" Coach title"/>
                     
-                    <div className="flex items-center justify-center mt-3">
-                        {title.error && (
-                        <p className="text-red-600 text-sm font-medium">
-                            {title.error}
-                        </p>
-                        )}
-                        {serverError && (
-                            <p className="text-red-600 text-sm font-medium mt-2">
-                            {serverError}
-                        </p>
-                        )}
-                    </div>
+                    {title.error && (
+                    <p className="text-red-600 text-sm font-medium">
+                        {title.error}
+                    </p>
+                    )}
+                    {serverError && (
+                        <p className="text-red-600 text-sm font-medium mt-2">
+                        {serverError}
+                    </p>
+                    )}
                 </label>
-                <label>
+                <label className="block pb-2">
                     Group: 
                     <select
                         value={groupId.value}
@@ -128,7 +126,7 @@ export default function Form({ onAddCoach}: FormProp) {
                             </option>
                         ))}
                     </select>
-                    <div className="flex items-center justify-center mt-3">
+                    <div className="">
                         {groupId.error && (
                         <p className="text-red-600 text-sm font-medium">
                             {groupId.error}
@@ -146,17 +144,15 @@ export default function Form({ onAddCoach}: FormProp) {
                         {success}
                     </p>
                 )}
-                <div className="flex gap-3">
+                <div className="flex justify-center gap-3">
                     <button
                         type="submit"
-                        className="border border-black rounded py-2 px-3
-                        bg-white text-black hover:bg-gray-100 active:scale-95
+                        className="text-black border rounded-md mt-5 px-3 py-2 bg-white hover:bg-gray-300
                         transition">Submit</button>
                     <button
                         type="button"
                         onClick={resetForm}
-                        className="border border-black rounded py-2 px-3
-                        bg-white text-black hover:bg-gray-100 active:scale-95
+                        className="text-black border rounded-md mt-5 px-3 py-2 bg-white hover:bg-gray-300
                         transition">Reset</button>
                 </div>
             </form>
