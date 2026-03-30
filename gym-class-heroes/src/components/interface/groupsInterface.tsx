@@ -1,7 +1,20 @@
 export interface GroupsInterface {
-    id: string;
+    id: number;
     name: string;
-    coachesById: number[];
-    athletesById: number[];
-    workoutsById: number[]; 
+    coach: {
+        id: number;
+        name: string;
+        title: string;
+    } | null;
+    athletes: {
+        id: number;
+        name: string;
+        sport: string;
+        experience: string;
+        status: string;
+    }[];
+    workouts: {
+        id: number;
+        workout: string;
+    }[];
 }

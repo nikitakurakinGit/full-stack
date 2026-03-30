@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import Coaches from "../components/coaches/coaches";
-import { coachData } from '../data/coachData';
 import type { CoachInterface } from '../components/interface/coachesInterface';
 import Form from '../components/form/coachForm';
 import * as coachServices from '../services/coachServices';
-import { useGroupData } from '../hooks/useGroupData';
+import * as coachRepo from '../apis/coachesRepo';
+import { Modal } from "../components/layout/modal";
+
 
 export default function CoachesPage() {
-    const [coaches, setCoaches] = useState<CoachInterface[]>(coachData)
-    const { groups, error, addToGroup, removeFromGroup } = useGroupData();
-    //hold group data in state here
+    const [coaches, setCoaches] = useState<CoachInterface[]>([])
+    const [ showForm, setShowForm ] = useState(false)
 
     useEffect(() => {
         const fetchCoaches = async () => {
@@ -20,30 +20,17 @@ export default function CoachesPage() {
     }, [])
 
 
-    const onAddCoach = async (newCoach: CoachInterface) => {
-        try {
-            const createdCoach = await coachServices.createCoach(newCoach)
-
-            if(typeof createdCoach === "string") {
-                console.error(createdCoach)
-                return 
-            }
-
-            setCoaches(prev => [...prev, createdCoach])
-            addToGroup(newCoach.group, "coachesById", newCoach.id)
-        } catch (error) {
-            console.error(error)
-        }
+    const onAddCoach = async (newCoach: CoachInterface) => {        
+        setCoaches(prev => [...prev, newCoach])
     }
 
     const onRemoveCoach = async (coach: CoachInterface) => {
         try{
             console.log("remove coach ran from coaches page")
-            const deletedCoachId = await coachServices.deleteCoach(coach.id)
+            
+            await coachRepo.deleteCoach(coach.id);
 
-            removeFromGroup(coach.group, "coachesById", coach.id)
-
-            setCoaches(prev => prev.filter(coach => coach.id !== deletedCoachId))
+            setCoaches(prev => prev.filter(c => c.id !== coach.id))
 
         } catch (error) {
             console.error(error)
@@ -52,14 +39,26 @@ export default function CoachesPage() {
 
     return (
         <>
-            <div className='flex flex-col w-full px-6 py-4 max-w-7xl mx-auto'>
+            <div className='flex flex-col w-full px-6 py-4 mx-auto'>
+                <div className="flex justify-left gap-4">
+                    <button
+                    onClick={() => setShowForm(prev => !prev)}
+                    className="bg-[#222527] text-white font-bold px-4 py-2 rounded-lg hover:bg-[#5e656a]"
+                    >
+                    {showForm ? "Close Form" : "Add Athlete"}
+                    </button>
+                </div>
+
+                {showForm && (
+                    <Modal onClose={() => setShowForm(false)}>
+                        <Form
+                            onAddCoach={onAddCoach}/>
+                    </Modal>
+                )}
+                
                 <Coaches
                 coaches={coaches}
                 onRemoveCoach={onRemoveCoach}/>
-                
-                <Form
-                onAddCoach={onAddCoach}
-                groups={groups}/>
             </div>
             
         </>

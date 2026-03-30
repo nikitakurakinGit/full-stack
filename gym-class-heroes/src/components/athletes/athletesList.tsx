@@ -2,58 +2,56 @@ import type { AthletesInterface } from "../interface/athletesInterface";
 import type { GroupsInterface } from "../interface/groupsInterface";
 
 type AthleteListProps = {
-    athletes: AthletesInterface[];
-    groupsData: GroupsInterface[];
-    onRemoveAthlete: (athlete: AthletesInterface) => void;
-}
+  athletes: AthletesInterface[];
+  groupsData: GroupsInterface[];
+  onRemoveAthlete: (athlete: AthletesInterface) => void;
+};
 
 export default function AthleteList({
-    athletes,
-    groupsData,
-    onRemoveAthlete
+  athletes,
+  groupsData,
+  onRemoveAthlete,
 }: AthleteListProps) {
-    return (
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w- full max-w-6xl mx-auto p-6">
-            {athletes.map((athlete) => {
-                // filter athlete from groupsData
-                const athleteGroups = groupsData.filter((group) =>
-                    group.athletesById.includes(athlete.id),
-                );
+  return (
+    <ul className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 pt-10">
 
-                return (
-                    <li
-                        key={athlete.id}
-                        className=" text-[#0c0e0e] p-4 rounded shadow-md border border-[#3e4447]"
-                    >
-                        <div>
-                            <p className="font-semibold text-lg">
-                                {athlete.name}
-                            </p>
-                            <p className="text-sm italic">
-                                {athlete.sport} | {athlete.experience} |{" "}
-                                {athlete.status}
-                            </p>
+      {athletes.map((athlete) => {
+        const athleteGroup = groupsData.find(
+          (group) => group.id === athlete.groupId
+        );
 
-                            <p className="text-sm font-semibold">
-                                Groups:{" "}
-                                {athleteGroups.length > 0
-                                    ? athleteGroups
-                                            .map((g) => g.name)
-                                            .join(", ")
-                                    : "None"}
-                            </p>
-                        </div>
+        return (
+          <li
+            key={athlete.id}
+            className="text-[#0c0e0e] p-5 rounded-lg shadow-lg border border-gray-900"
+          >
+            <div>
+              <div className="flex justify-between items-start">
+                <p className="truncate max-w-full font-semibold text-lg">
+                  {athlete.name}
+                </p>
 
-                        <button
-                            type="button"
-                            onClick={() => onRemoveAthlete(athlete)}
-                            className="bg-[#848e94] text-white text-sm px-3 py-1 rounded"
-                        >
-                            Remove Athlete
-                        </button>
-                    </li>
-                );
-            })}
-        </ul>
-    );
+                <button
+                  type="button"
+                  onClick={() => onRemoveAthlete(athlete)}
+                  className="bg-[#848e94] text-white text-sm px-3 py-1 rounded-md hover:bg-[#5e656a]"
+                >
+                  X
+                </button>
+              </div>
+
+              <p className="text-md italic">
+                {athlete.experience} | {athlete.status}
+              </p>
+
+              <p className="text-md font-semibold pb-3">
+                Group: {athleteGroup ? athleteGroup.name : "None"}
+              </p>
+            </div>
+          </li>
+        );
+      })}
+
+    </ul>
+  );
 }
