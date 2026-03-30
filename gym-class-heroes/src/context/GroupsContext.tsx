@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { GroupsInterface } from '../components/interface/groupsInterface';
+import * as groupServices from '../services/groupServices';
 const API_URL = import.meta.env.VITE_API_URL; 
 
 interface GroupsContextType {
@@ -13,9 +14,9 @@ export function GroupsProvider({ children }: { children: React.ReactNode }) {
     const [groups, setGroups] = useState<GroupsInterface[]>([]);
 
     const fetchGroups = async () => {
-        const res = await fetch(`${API_URL}/groups`)
-        const data = await res.json()
+        const data = await groupServices.fetchGroups();
         setGroups(data)
+        console.log(data)
     }
 
     useEffect(() => {

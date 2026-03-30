@@ -2,5 +2,9 @@ export interface CoachInterface {
     id: number;
     name: string;
     title: string;
-    group: string;
+    groupId: number;
+    group: {
+        id: number;
+        name: string;
+    };
 }
