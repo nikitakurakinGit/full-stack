@@ -7,7 +7,6 @@ export async function fetchCoaches(): Promise<CoachInterface[]>{
     const res = await fetch(`${API_URL}/coaches`)
 
     const data: CoachInterface[] = await res.json()
-
     return data;
 }
 

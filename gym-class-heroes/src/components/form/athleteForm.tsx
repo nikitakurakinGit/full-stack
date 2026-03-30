@@ -48,16 +48,16 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
 
     if (!validName || !validExperience || !validStatus || !validGroup) return;
 
-    const athleteId = Math.floor(1000 + Math.random() * 9000);
+    const athleteId = Math.floor(1000 + Math.random() * 9000); //dont need this, remove it
 
-    const newAthlete: AthletesInterface = {
-      id: athleteId,
+    const newAthlete: AthletesInterface = { //should be athelteDTO
+      id: athleteId, //dont need this, remove it
       name: name.value,
       experience: experience.value as "Beginner" | "Intermediate" | "Advanced",
       status: status.value as "Active" | "Inactive" | "Injured",
-      groupId: selectedGroup.value
+      groupId: selectedGroup.value //should be a number
     };
-
+    //should be in a try
     athleteService.createAthlete(newAthlete);
     addAthlete(newAthlete);
 
