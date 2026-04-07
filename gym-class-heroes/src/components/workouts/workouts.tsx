@@ -1,32 +1,51 @@
 import type { WorkoutsInterface } from "../interface/workoutsInterface";
-type WorkoutProps = {
-        onRemoveWorkout: (workoutId: number) => void;
-        workouts: WorkoutsInterface[];
-    }
+import { useState } from 'react';
+import { Modal } from "../layout/modal";
+import GroupPopUp from "../groups/groupPopUp";
 
-function Workouts({ workouts, onRemoveWorkout }: WorkoutProps) {
+type WorkoutsProps = {
+    onRemoveWorkout: (workout: WorkoutsInterface) => void;
+    workouts: WorkoutsInterface[];
+}
+
+function Workouts({ workouts, onRemoveWorkout }: WorkoutsProps) {
+
+    const [selectedGroup, setSelectedGroup] = useState<number | null>(null);
+
     return (
-        <section className="mt-10 flex flex-wrap justify-center gap-8 px-6 py-10
-                        w-full max-w-6xl mx-auto bg-[#bcc8d0]
-                        border-2 border-gray-300 rounded-2xl">
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mx-auto p-6">
             {workouts.map((workout) => (
-                <div key={workout.id} className="flex flex-col items-center gap-4">
-                    <div className="flex flex-col bg-white border border-gray-200
-                          rounded-xl shadow-md p-6 w-64 hover:shadow-lg transition-shadow duration-300">
-                        <ul className="list-disc list-inside space-y-1 text-sm text-[#0c0e0e]">
-                            {workout.workout.map((item, index) => ( <li key={index}>{item}</li>
+                <div className="p-4 rounded shadow-md border border-[#3e4447]" key={workout.id}>
+                    <div className="flex flex-col items-baseline gap-2">
+                        <h4 className="text-lg font-semibold drop-shadow">Workout #{workout.id}</h4>
+                        <ul className="list-disc list-inside text-sm text-[#0c0e0e] mb-2">
+                            {workout.workout.map((item, index) => (
+                                <li key={index}>{item}</li>
                             ))}
-                            </ul>
-                        <span className="border text-sm font-medium mt-3 text-center text-[#0c0e0e]">Group: {workout.group}</span>
+                        </ul>
+                        <div>
+                            <span 
+                                className="text-sm italic cursor-pointer hover:text-blue-400 transition" 
+                                onClick={() => setSelectedGroup(Number(workout.group))}
+                            >
+                                Group: {workout.group.name}
+                            </span>
+                        </div>
                     </div>
                     <button
                         type="button"
-                        onClick={() => onRemoveWorkout(workout.id)}
-                        className="border border-black rounded py-2 px-3
-                        bg-white hover:bg-gray-100 active:scale-95
-                        transition">Remove</button>
+                        onClick={() => onRemoveWorkout(workout)}
+                        className="border border-black rounded py-2 px-3 mt-5
+                        bg-white text-sm hover:bg-gray-100 active:scale-95
+                        transition">Remove Workout</button>
                 </div>
             ))}
+
+            {selectedGroup && (
+                <Modal onClose={() => setSelectedGroup(null)}>
+                    <GroupPopUp groupId={selectedGroup}/>
+                </Modal>
+            )}
         </section>
     )
 }

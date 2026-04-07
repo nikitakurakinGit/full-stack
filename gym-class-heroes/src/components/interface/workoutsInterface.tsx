@@ -1,5 +1,9 @@
 export interface WorkoutsInterface {
     id: number;
     workout: string[];
-    group: string;
+    groupId: number;
+    group:{
+        id: number;
+        name: string;
+    } 
 }
