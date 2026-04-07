@@ -45,7 +45,7 @@ export default function CoachesPage() {
                     onClick={() => setShowForm(prev => !prev)}
                     className="bg-[#222527] text-white font-bold px-4 py-2 rounded-lg hover:bg-[#5e656a]"
                     >
-                    {showForm ? "Close Form" : "Add Athlete"}
+                    {showForm ? "Close Form" : "Add Coach"}
                     </button>
                 </div>
 
