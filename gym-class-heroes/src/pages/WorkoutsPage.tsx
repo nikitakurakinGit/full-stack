@@ -1,87 +1,107 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import Workouts from "../components/workouts/workouts";
 import type { WorkoutsInterface } from '../components/interface/workoutsInterface';
-import WorkoutForm from '../components/form/workoutForm';
-import * as workoutService from "../services/workoutServices";
-import { useGroupData } from '../hooks/useGroupData';
-import { workoutData } from '../data/workoutData';
+import Form from '../components/form/workoutForm';
+import * as workoutServices from '../services/workoutServices';
+import * as workoutRepo from '../apis/workoutRepository';
+import { Modal } from "../components/layout/modal";
 
 export default function WorkoutsPage() {
-    const [workouts, setWorkouts] = useState<WorkoutsInterface[]>(workoutData);
 
-    const {
-        groups,
-        error,
-        addToGroup,
-        removeFromGroup        
-    } = useGroupData();
+    const [workouts, setWorkouts] = useState<WorkoutsInterface[]>([]);
+    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
         const fetchWorkouts = async () => {
             const workouts =
-                await workoutService.fetchWorkouts();
+                await workoutServices.fetchWorkouts();
 
             setWorkouts([...workouts]);
-        }; 
+        };
+
         fetchWorkouts();
+
     }, []);
 
-    const onAddWorkout = async (newWorkout: WorkoutsInterface) => {
-        try {
-
-        const createWorkout = await workoutService.createWorkout(newWorkout);
-
-        if (typeof createWorkout === "string") {
-            console.error(createWorkout);
-            return;
-        }
+    const onAddWorkout = async (
+        newWorkout: WorkoutsInterface
+    ) => {
 
         setWorkouts(prev => [
             ...prev,
-            createWorkout
+            newWorkout
         ]);
 
-        addToGroup(newWorkout.group, "workoutsById", newWorkout.id);
-
-        } catch (error) {
-            console.error(error);
-        }
     };
 
     const onRemoveWorkout = async (
-        workoutId: number
+        workout: WorkoutsInterface
     ) => {
+
         try {
 
-        const workout =
-            workouts.find(w => w.id === workoutId);
+            console.log(
+                "remove workout ran from workouts page"
+            );
 
-        if (!workout) return;
+            await workoutRepo.deleteWorkout(
+                workout.id
+            );
 
-        await workoutService.deleteWorkout(workoutId);
-
-        removeFromGroup(
-            workout.group,
-            "workoutsById",
-            workoutId
-        );
-
-        setWorkouts(prev =>
-            prev.filter(w => w.id !== workoutId)
-        );
+            setWorkouts(prev =>
+                prev.filter(w =>
+                    w.id !== workout.id
+                )
+            );
 
         } catch (error) {
             console.error(error);
         }
+
     };
 
     return (
         <>
-            <div className='flex flex-col w-full min-h-screen bg-gray-50'>
-                <Workouts workouts={workouts} onRemoveWorkout={onRemoveWorkout}/>
-                <WorkoutForm groupsData={groups} onAddWorkout={onAddWorkout}/>
+            <div className='flex flex-col w-full px-6 py-4 mx-auto'>
+
+                <div className="flex justify-left gap-4">
+
+                    <button
+                        onClick={() =>
+                            setShowForm(prev =>
+                                !prev
+                            )
+                        }
+                        className="bg-[#222527] text-white font-bold px-4 py-2 rounded-lg hover:bg-[#5e656a]"
+                    >
+                        {showForm
+                            ? "Close Form"
+                            : "Add Workout"}
+                    </button>
+
+                </div>
+
+                {showForm && (
+
+                    <Modal
+                        onClose={() =>
+                            setShowForm(false)
+                        }
+                    >
+                        <Form
+                            onAddWorkout={onAddWorkout}
+                        />
+                    </Modal>
+
+                )}
+
+                <Workouts
+                    workouts={workouts}
+                    onRemoveWorkout={onRemoveWorkout}
+                />
+
             </div>
-            
         </>
-    )
+    );
+
 }
