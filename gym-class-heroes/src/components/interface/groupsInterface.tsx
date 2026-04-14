@@ -15,6 +15,6 @@ export interface GroupsInterface {
     }[];
     workouts: {
         id: number;
-        workout: string;
+        workout: string[];
     }[];
 }
