@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { GroupsInterface } from '../components/interface/groupsInterface';
 import * as groupServices from '../services/groupServices';
-const API_URL = import.meta.env.VITE_API_URL; 
 
 interface GroupsContextType {
     groups: GroupsInterface[],
