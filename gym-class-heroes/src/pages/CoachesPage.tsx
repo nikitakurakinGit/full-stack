@@ -8,6 +8,7 @@ import { Modal } from "../components/layout/modal";
 
 
 export default function CoachesPage() {
+    console.log(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY)
     const [coaches, setCoaches] = useState<CoachInterface[]>([])
     const [ showForm, setShowForm ] = useState(false)
 
