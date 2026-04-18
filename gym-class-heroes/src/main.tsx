@@ -8,12 +8,16 @@ import { ClerkProvider } from '@clerk/clerk-react'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
-      <GroupsProvider>
-        <BrowserRouter>
+    <BrowserRouter>
+      <ClerkProvider 
+          publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}
+          signInFallbackRedirectUrl="/coaches"
+          afterSignOutUrl="/"
+        >
+        <GroupsProvider>
           <App />
-        </BrowserRouter>
-      </GroupsProvider>
-    </ClerkProvider>
+        </GroupsProvider>
+      </ClerkProvider>
+    </BrowserRouter>
   </StrictMode>
 )

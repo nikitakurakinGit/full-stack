@@ -3,18 +3,28 @@ import type { CoachInterface } from "../components/interface/coachesInterface";
 const API_URL = import.meta.env.VITE_API_URL; 
 
 
-export async function fetchCoaches(): Promise<CoachInterface[]>{
-    const res = await fetch(`${API_URL}/coaches`)
+export async function fetchCoaches(token: string): Promise<CoachInterface[]>{
+    const res = await fetch(`${API_URL}/coaches`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+
+    if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.error)
+    }
 
     const data: CoachInterface[] = await res.json()
     return data;
 }
 
-export async function createCoach({name, title, groupId}: CoachDTO): Promise<CoachInterface> {
+export async function createCoach({name, title, groupId}: CoachDTO, token: string): Promise<CoachInterface> {
     const res = await fetch(`${API_URL}/coaches`, {
         method: "POST",
         headers: {
             "content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({name, title, groupId})
     });
@@ -28,10 +38,13 @@ export async function createCoach({name, title, groupId}: CoachDTO): Promise<Coa
     return data
 }
 
-export async function deleteCoach(coachId: number): Promise<void> {
+export async function deleteCoach(coachId: number, token: string): Promise<void> {
     console.log(API_URL)
     const res = await fetch(`${API_URL}/coaches/${coachId}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
     });
 
     if(!res.ok){
