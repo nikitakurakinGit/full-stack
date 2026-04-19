@@ -5,6 +5,8 @@ import * as coachRepo from '../../apis/coachesRepo';
 import type { CoachInterface } from "../interface/coachesInterface";
 import { useGroupContext } from "../../hooks/useGroupContext";
 import type { CoachDTO } from "../interface/coachDTO";
+import { useAuth } from '@clerk/clerk-react';
+
 
 type FormProp = {
     onAddCoach: (
@@ -12,6 +14,7 @@ type FormProp = {
 }
 
 export default function Form({ onAddCoach}: FormProp) {
+    const { getToken } = useAuth()
     const { groups } = useGroupContext();
     
     const name = useFormInput("", (value) => {
@@ -55,7 +58,9 @@ export default function Form({ onAddCoach}: FormProp) {
         }
         
         try {
-            const newCoach = await coachRepo.createCoach(coachPayload);
+            const token = await getToken()
+            if(!token) return
+            const newCoach = await coachRepo.createCoach(coachPayload, token);
             
             onAddCoach(newCoach);
             
