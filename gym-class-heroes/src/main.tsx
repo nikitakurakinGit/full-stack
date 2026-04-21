@@ -4,13 +4,20 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import { GroupsProvider } from './context/GroupsContext.tsx'
+import { ClerkProvider } from '@clerk/clerk-react'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <GroupsProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </GroupsProvider>
+    <BrowserRouter>
+      <ClerkProvider 
+          publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}
+          signInFallbackRedirectUrl="/coaches"
+          afterSignOutUrl="/"
+        >
+        <GroupsProvider>
+          <App />
+        </GroupsProvider>
+      </ClerkProvider>
+    </BrowserRouter>
   </StrictMode>
 )
