@@ -14,7 +14,7 @@ export default function AthleteList({
 }: AthleteListProps) {
   
   const [selectedGroup, setSelectedGroup] = useState<number | null>(null);
-
+  console.log("athletes",athletes)
   return (
     <>
       <ul className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 pt-10">
@@ -46,7 +46,7 @@ export default function AthleteList({
                   className="text-md font-semibold pb-3 cursor-pointer hover:text-blue-400 transition"
                   onClick={() => setSelectedGroup(athlete.group.id)}
                 >
-                  Group: {athlete.group.name}
+                  Group: {athlete.group.name ?? "No Group"}
                 </p>
               </div>
             </li>
