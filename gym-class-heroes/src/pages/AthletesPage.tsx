@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import * as athleteService from "../services/athleteServices";
-
+import * as athleteRepo from "../apis/athleteRepository"
 import AthleteList from "../components/athletes/athletesList";
 import AthleteForm from "../components/form/athleteForm";
-
-import { useGroupData } from "../hooks/useGroupData";
 import type { AthletesInterface } from "../components/interface/athletesInterface";
 import { Modal } from "../components/layout/modal";
+import { useAuth } from "@clerk/clerk-react";
+import { useGroupContext } from "../hooks/useGroupContext";
 
 export default function AthletesPage() {
   /**
@@ -20,42 +20,37 @@ export default function AthletesPage() {
    *
    */
 
+  const { getToken } = useAuth();
+  const { refreshGroups } = useGroupContext()
   const [athletes, setAthletes] = useState<AthletesInterface[]>([]);
-  const { groups, error } = useGroupData();
-
   const [showForm, setShowForm] = useState(false);
 
   // FETCH ATHLETES ON LOAD
   useEffect(() => {
     const fetchAthletes = async () => {
-      const data = await athleteService.fetchAthletes();
-      setAthletes([...data]);
+      const token = await getToken()
+      if (!token) return
+
+      const athletes = await athleteService.fetchAthletes(token);
+      setAthletes([...athletes]);
     };
     fetchAthletes();
   }, []);
 
   // ADD ATHLETE 
   const onAddAthlete = async (newAthlete: AthletesInterface) => {
-    try {
-      const createdAthlete = await athleteService.createAthlete(newAthlete);
-
-      if (typeof createdAthlete === "string") {
-        console.error(createdAthlete);
-        return;
-      }
-
-      setAthletes((prev) => [...prev, newAthlete]);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    setAthletes(prev => [...prev, newAthlete])
+  }
 
   // REMOVE ATHLETE
   const onRemoveAthlete = async (athlete: AthletesInterface) => {
     try {
-      await athleteService.deleteAthlete(athlete.id);
-
+      const token = await getToken()
+        if(!token) return
+      await athleteRepo.deleteAthlete(athlete.id, token);
+      refreshGroups();
       setAthletes((prev) => prev.filter((a) => a.id !== athlete.id));
+
     } catch (err) {
       console.error(err);
     }
@@ -77,8 +72,7 @@ export default function AthletesPage() {
       {showForm && (
         <Modal onClose={() => setShowForm(false)}>
           <AthleteForm
-            addAthlete={onAddAthlete}
-            groupsData={groups}
+            onAddAthlete={onAddAthlete}
           />
         </Modal>
       )}
@@ -92,13 +86,8 @@ export default function AthletesPage() {
        */}
       <AthleteList
         athletes={athletes}
-        groupsData={groups}
         onRemoveAthlete={onRemoveAthlete}
       />
-
-      {error && (
-        <p className="text-red-600 text-sm mt-2">{error}</p>
-      )}
     </div>
   );
 }
