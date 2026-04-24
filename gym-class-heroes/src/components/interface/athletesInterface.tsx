@@ -3,5 +3,9 @@ export interface AthletesInterface {
   name: string;
   experience: "Beginner" | "Intermediate" | "Advanced";
   status: "Active" | "Inactive" | "Injured";
-  groupId: string;
+  groupId: number;
+  group: {
+    id: number;
+    name: string;
+  }
 }
