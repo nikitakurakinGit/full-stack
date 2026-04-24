@@ -14,8 +14,8 @@ export function GroupsProvider({ children }: { children: React.ReactNode }) {
 
     const fetchGroups = async () => {
         const data = await groupServices.fetchGroups();
-        setGroups(data)
-        console.log(data)
+        setGroups([...data])
+        console.log("groups updated", data)
     }
 
     useEffect(() => {

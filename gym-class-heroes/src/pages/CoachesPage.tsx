@@ -6,10 +6,12 @@ import * as coachServices from '../services/coachServices';
 import * as coachRepo from '../apis/coachesRepo';
 import { Modal } from "../components/layout/modal";
 import { useAuth } from '@clerk/clerk-react';
+import { useGroupContext } from "../hooks/useGroupContext";
 
 
 export default function CoachesPage() {
     const { getToken } = useAuth()
+    const { refreshGroups } = useGroupContext()
     const [coaches, setCoaches] = useState<CoachInterface[]>([])
     const [ showForm, setShowForm ] = useState(false)
 
@@ -33,7 +35,7 @@ export default function CoachesPage() {
             const token = await getToken()
             if(!token) return
             await coachRepo.deleteCoach(coach.id, token);
-
+            refreshGroups();
             setCoaches(prev => prev.filter(c => c.id !== coach.id))
 
         } catch (error) {

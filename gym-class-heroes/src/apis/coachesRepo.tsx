@@ -1,5 +1,6 @@
 import type { CoachDTO } from "../components/interface/coachDTO";
 import type { CoachInterface } from "../components/interface/coachesInterface";
+import { fetchGroups } from "../services/groupServices";
 const API_URL = import.meta.env.VITE_API_URL; 
 
 
@@ -39,7 +40,6 @@ export async function createCoach({name, title, groupId}: CoachDTO, token: strin
 }
 
 export async function deleteCoach(coachId: number, token: string): Promise<void> {
-    console.log(API_URL)
     const res = await fetch(`${API_URL}/coaches/${coachId}`, {
         method: "DELETE",
         headers: {
