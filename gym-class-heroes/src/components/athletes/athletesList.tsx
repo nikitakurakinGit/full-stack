@@ -1,57 +1,63 @@
 import type { AthletesInterface } from "../interface/athletesInterface";
-import type { GroupsInterface } from "../interface/groupsInterface";
+import { useState } from "react";
+import { Modal } from "../layout/modal";
+import GroupPopUp from "../groups/groupPopUp";
 
 type AthleteListProps = {
   athletes: AthletesInterface[];
-  groupsData: GroupsInterface[];
   onRemoveAthlete: (athlete: AthletesInterface) => void;
 };
 
 export default function AthleteList({
   athletes,
-  groupsData,
   onRemoveAthlete,
 }: AthleteListProps) {
+  
+  const [selectedGroup, setSelectedGroup] = useState<number | null>(null);
+
   return (
-    <ul className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 pt-10">
+    <>
+      <ul className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 pt-10">
+        {athletes.map((athlete) => (
+            <li
+              key={athlete.id}
+              className="text-[#0c0e0e] p-5 rounded-lg shadow-lg border border-gray-900"
+            >
+              <div>
+                <div className="flex justify-between items-start">
+                  <p className="truncate max-w-full font-semibold text-lg">
+                    {athlete.name}
+                  </p>
 
-      {athletes.map((athlete) => {
-        const athleteGroup = groupsData.find(
-          (group) => group.id === athlete.groupId
-        );
+                  <button
+                    type="button"
+                    onClick={() => onRemoveAthlete(athlete)}
+                    className="bg-[#848e94] text-white text-sm px-3 py-1 rounded-md hover:bg-[#5e656a]"
+                  >
+                    X
+                  </button>
+                </div>
 
-        return (
-          <li
-            key={athlete.id}
-            className="text-[#0c0e0e] p-5 rounded-lg shadow-lg border border-gray-900"
-          >
-            <div>
-              <div className="flex justify-between items-start">
-                <p className="truncate max-w-full font-semibold text-lg">
-                  {athlete.name}
+                <p className="text-md italic">
+                  {athlete.experience} | {athlete.status}
                 </p>
 
-                <button
-                  type="button"
-                  onClick={() => onRemoveAthlete(athlete)}
-                  className="bg-[#848e94] text-white text-sm px-3 py-1 rounded-md hover:bg-[#5e656a]"
+                <p
+                  className="text-md font-semibold pb-3 cursor-pointer hover:text-blue-400 transition"
+                  onClick={() => setSelectedGroup(athlete.group.id)}
                 >
-                  X
-                </button>
+                  Group: {athlete.group.name}
+                </p>
               </div>
-
-              <p className="text-md italic">
-                {athlete.experience} | {athlete.status}
-              </p>
-
-              <p className="text-md font-semibold pb-3">
-                Group: {athleteGroup ? athleteGroup.name : "None"}
-              </p>
-            </div>
-          </li>
-        );
-      })}
-
-    </ul>
+            </li>
+        ))}
+      </ul>
+    
+      {selectedGroup && (
+        <Modal onClose={() => setSelectedGroup(null)}>
+          <GroupPopUp groupId={selectedGroup} />
+        </Modal>
+      )}
+    </>  
   );
 }
