@@ -15,8 +15,19 @@ type FormProp = {
 
 export default function Form({ onAddCoach}: FormProp) {
     const { getToken } = useAuth()
-    const { groups } = useGroupContext();
+    const { groups, refreshGroups } = useGroupContext();
+    const [success, setSuccess] = useState("");
+    const [serverError, setServerError] = useState("");
     
+    const filteredGroups = groups.map((group) => ({
+        id: group.id,
+        name: group.name,
+        hasCoach: !!group.coach,
+    }))
+
+
+
+
     const name = useFormInput("", (value) => {
         return coachService.validateCoachName(value)
     })
@@ -30,14 +41,14 @@ export default function Form({ onAddCoach}: FormProp) {
     })
 
 
-    const [success, setSuccess] = useState("");
-    const [serverError, setServerError] = useState("");
+    
 
     function resetForm(){
         name.reset()
         title.reset()
         groupId.reset()
-        setSuccess("")    
+        setSuccess("")  
+        setServerError("")  
     }
 
     
@@ -63,9 +74,11 @@ export default function Form({ onAddCoach}: FormProp) {
             const newCoach = await coachRepo.createCoach(coachPayload, token);
             
             onAddCoach(newCoach);
+            refreshGroups();
             
         } catch(error: any) {
             setServerError(error.message)
+            return
         }
 
         resetForm()
@@ -124,9 +137,9 @@ export default function Form({ onAddCoach}: FormProp) {
                         onChange={(e) => groupId.setValue(e.target.value)}
                         className="border-2 rounded p-1 m-2 text-black"
                     >
-                        <option value="">Select Group</option>
-                        {groups.map(group => (
-                            <option key={group.id} value={group.id}>
+                        <option value="" disabled>Select Group</option>
+                        {filteredGroups.map(group => (
+                            <option key={group.id} value={group.id} disabled={group.hasCoach}>
                                 {group.name}
                             </option>
                         ))}
