@@ -13,7 +13,7 @@ type AthleteFormProps = {
 
 export default function AthleteForm({ onAddAthlete }: AthleteFormProps) {
   const { getToken } = useAuth();
-  const { groups } = useGroupContext();
+  const { groups, refreshGroups } = useGroupContext();
 
   const name = useFormInput("", (value) => athleteService.validateAthleteName(value));
 
@@ -67,6 +67,7 @@ export default function AthleteForm({ onAddAthlete }: AthleteFormProps) {
       const newAthlete = await athleteRepo.createAthlete(athletePayload, token);
 
       onAddAthlete(newAthlete);
+      refreshGroups();
       resetForm();
       setSuccess("Athlete added successfully");
 

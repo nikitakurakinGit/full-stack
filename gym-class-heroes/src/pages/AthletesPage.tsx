@@ -6,6 +6,7 @@ import AthleteForm from "../components/form/athleteForm";
 import type { AthletesInterface } from "../components/interface/athletesInterface";
 import { Modal } from "../components/layout/modal";
 import { useAuth } from "@clerk/clerk-react";
+import { useGroupContext } from "../hooks/useGroupContext";
 
 export default function AthletesPage() {
   /**
@@ -20,6 +21,7 @@ export default function AthletesPage() {
    */
 
   const { getToken } = useAuth();
+  const { refreshGroups } = useGroupContext()
   const [athletes, setAthletes] = useState<AthletesInterface[]>([]);
   const [showForm, setShowForm] = useState(false);
 
@@ -46,7 +48,7 @@ export default function AthletesPage() {
       const token = await getToken()
         if(!token) return
       await athleteRepo.deleteAthlete(athlete.id, token);
-
+      refreshGroups();
       setAthletes((prev) => prev.filter((a) => a.id !== athlete.id));
 
     } catch (err) {
