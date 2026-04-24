@@ -3,8 +3,8 @@ import type { WorkoutsInterface } from '../components/interface/workoutsInterfac
 
 
 // Fetch all workouts
-export async function fetchWorkouts(): Promise<WorkoutsInterface[]> {
-    const workouts = await workoutServices.fetchWorkouts();
+export async function fetchWorkouts(token: string): Promise<WorkoutsInterface[]> {
+    const workouts = await workoutServices.fetchWorkouts(token);
     return workouts;
 }
 
@@ -28,8 +28,8 @@ export function validateGroup(group: string) {
 
 
 // Delete workout
-export async function deleteWorkout(workoutId: number) {
+export async function deleteWorkout(workoutId: number, token: string) {
     console.log("deleteWorkout service ran");
 
-    return workoutServices.deleteWorkout(workoutId);
+    return workoutServices.deleteWorkout(workoutId, token);
 }
