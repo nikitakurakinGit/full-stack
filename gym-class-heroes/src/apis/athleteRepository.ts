@@ -16,11 +16,12 @@ export async function fetchAthletes(): Promise<AthletesInterface[]> {
 }
 
 // CREATE athlete
-export async function createAthlete({ name, experience, status, groupId }: AthleteDTO) {
+export async function createAthlete({ name, experience, status, groupId }: AthleteDTO, token: string) {
   const res = await fetch(`${API_URL}/athletes`, {
     method: "POST",
     headers: {
       "content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify({ name, experience, status, groupId })
   });
@@ -34,9 +35,12 @@ export async function createAthlete({ name, experience, status, groupId }: Athle
 }
 
 // DELETE athlete
-export async function deleteAthlete(athleteId: number): Promise<void> {
+export async function deleteAthlete(athleteId: number, token: string): Promise<void> {
   const res = await fetch(`${API_URL}/athletes/${athleteId}`, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    }
   });
 
   if (!res.ok) {
