@@ -5,6 +5,8 @@ import * as workoutRepo from '../../apis/workoutRepository';
 import type { WorkoutsInterface } from "../interface/workoutsInterface";
 import { useGroupContext } from "../../hooks/useGroupContext";
 import type { WorkoutDTO } from "../interface/workoutDTO";
+import { useAuth } from '@clerk/clerk-react';
+
 
 type FormProp = {
     onAddWorkout: (
@@ -13,7 +15,7 @@ type FormProp = {
 }
 
 export default function Form({ onAddWorkout }: FormProp) {
-
+    const { getToken } = useAuth()
     const { groups } = useGroupContext();
 
     const workoutList = useFormInput("", (value) => {
@@ -61,10 +63,11 @@ export default function Form({ onAddWorkout }: FormProp) {
         };
 
         try {
-
+            const token = await getToken()
+            if(!token) return
             const newWorkout =
                 await workoutRepo.createWorkout(
-                    workoutPayload
+                    workoutPayload, token
                 );
 
             onAddWorkout(newWorkout);

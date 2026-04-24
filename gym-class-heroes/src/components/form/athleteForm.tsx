@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { useFormInput } from "../../hooks/useFormInput";
 import * as athleteService from "../../services/athleteServices";
+import * as athleteRepo from "../../apis/athleteRepository";
 import type { AthletesInterface } from "../interface/athletesInterface";
-import type { GroupsInterface } from "../interface/groupsInterface";
+import type { AthleteDTO } from "../interface/athleteDTO";
+import { useGroupContext } from "../../hooks/useGroupContext";
+import { useAuth } from "@clerk/clerk-react";
 
 type AthleteFormProps = {
-  addAthlete: (athlete: AthletesInterface) => void;
-  groupsData: GroupsInterface[];
+  onAddAthlete: (athlete: AthletesInterface) => void;
 };
 
-export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps) {
+export default function AthleteForm({ onAddAthlete }: AthleteFormProps) {
+  const { getToken } = useAuth();
+  const { groups, refreshGroups } = useGroupContext();
 
   const name = useFormInput("", (value) => athleteService.validateAthleteName(value));
 
@@ -23,48 +27,54 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
     return null;
   });
 
-  const selectedGroup = useFormInput("", (value) => {
+  const groupId = useFormInput("", (value) => {
     if (!value) return "Select a group";
     return null;
   });
 
   const [success, setSuccess] = useState("");
+  const [serverError, setServerError] = useState("");
 
   function resetForm() {
     name.reset();
     experience.reset();
     status.reset();
-    selectedGroup.reset();
+    groupId.reset();
     setSuccess("");
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     const validName = name.validate();
-    const validGroup = selectedGroup.validate();
     const validExperience = experience.validate();
     const validStatus = status.validate();
+    const validGroup = groupId.validate();
 
     if (!validName || !validExperience || !validStatus || !validGroup) return;
 
-    const athleteId = Math.floor(1000 + Math.random() * 9000); //dont need this, remove it
-
-    const newAthlete: AthletesInterface = { //should be athelteDTO
-      id: athleteId, //dont need this, remove it
+    const athletePayload: AthleteDTO = {
       name: name.value,
       experience: experience.value as "Beginner" | "Intermediate" | "Advanced",
       status: status.value as "Active" | "Inactive" | "Injured",
-      groupId: selectedGroup.value //should be a number
+      groupId: Number(groupId.value)
     };
-    //should be in a try
-    athleteService.createAthlete(newAthlete);
-    addAthlete(newAthlete);
 
-    resetForm();
-    setSuccess("Athlete added successfully");
+    try {
+      const token = await getToken();
+      if (!token) return;
 
-    setTimeout(() => setSuccess(""), 5000);
+      const newAthlete = await athleteRepo.createAthlete(athletePayload, token);
+
+      onAddAthlete(newAthlete);
+      refreshGroups();
+      resetForm();
+      setSuccess("Athlete added successfully");
+
+      setTimeout(() => setSuccess(""), 5000);
+    } catch (error: any) {
+      setServerError(error.message);
+    }
   }
 
   return (
@@ -74,6 +84,7 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
     >
       <h2 className="flex font-bold text-[22px] mb-5 justify-center">Add New Athlete</h2>
 
+      {/** NAME */}
       <label className="block pb-2">
         Name:
         <input
@@ -83,9 +94,10 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
           placeholder="Athlete Name"
         />
         {name.error && <p className="text-red-600 text-sm">{name.error}</p>}
-
+        {serverError && <p className="text-red-600 text-sm font-medium mt-2">{serverError}</p>}
       </label>
 
+      {/** EXPERIENCE */}
       <label className="block pb-2">
         Experience:
         <select
@@ -107,9 +119,11 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
         {experience.error && (
           <p className="text-red-600 text-sm">{experience.error}</p>
         )}
+        {serverError && <p className="text-red-600 text-sm font-medium mt-2">{serverError}</p>}
 
       </label>
-
+      
+      {/** STATUS */}
       <label className="block pb-2">
         Status:
         <select
@@ -131,30 +145,33 @@ export default function AthleteForm({ addAthlete, groupsData }: AthleteFormProps
         {status.error && (
           <p className="text-red-600 text-sm">{status.error}</p>
         )}
+        {serverError && <p className="text-red-600 text-sm font-medium mt-2">{serverError}</p>}
       </label>
 
+      {/** GROUP */}
       <label className="block pb-2">
         Group:
         <select
-          value={selectedGroup.value}
-          onChange={(e) => selectedGroup.setValue(e.target.value)}
+          value={groupId.value}
+          onChange={(e) => groupId.setValue(e.target.value)}
           className={`border rounded-md p-1 m-1 
-            ${selectedGroup.value === "" ? "text-gray-500" : "text-black"}`}
+            ${groupId.value === "" ? "text-gray-500" : "text-black"}`}
         >
           <option value="" disabled className="text-gray-500">
             Select a group
           </option>
 
-          {groupsData.map((g) => (
+          {groups.map((g) => (
             <option key={g.id} value={g.id} className="text-black">
               {g.name}
             </option>
           ))}
         </select>
         
-        {selectedGroup.error && (
-          <p className="text-red-600 text-sm">{selectedGroup.error}</p>
+        {groupId.error && (
+          <p className="text-red-600 text-sm">{groupId.error}</p>
         )}
+        {serverError && <p className="text-red-600 text-sm font-medium mt-2">{serverError}</p>}
       </label>
 
       {success && <p className="text-green-600 text-sm">{success}</p>}

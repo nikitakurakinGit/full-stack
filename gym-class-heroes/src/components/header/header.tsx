@@ -1,4 +1,5 @@
 import Nav from "../nav/nav";
+import { SignInButton, UserButton, SignedIn, SignedOut } from "@clerk/clerk-react";
 
 export default function Header({
     projectName,
@@ -19,6 +20,15 @@ export default function Header({
             </div>
             <div className="flex-1 flex justify-end items-center">
                 <Nav/>
+            </div>
+            <div className="flex items-center">
+                <SignedOut>
+                    <SignInButton />
+                </SignedOut>
+
+                <SignedIn>
+                    <UserButton />
+                </SignedIn>
             </div>
         </header>
     );

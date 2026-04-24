@@ -1,8 +1,8 @@
 import * as coachServices from '../apis/coachesRepo';
 import type { CoachInterface } from '../components/interface/coachesInterface';
 
-export async function fetchCoaches(): Promise<CoachInterface[]> {
-    const coaches = await coachServices.fetchCoaches();
+export async function fetchCoaches(token: string): Promise<CoachInterface[]> {
+    const coaches = await coachServices.fetchCoaches(token);
     return coaches;
 }
 
@@ -28,7 +28,7 @@ export function validateGroup(group: string) {
 
 
 
-export async function deleteCoach(coachId: number) {
+export async function deleteCoach(coachId: number, token:string) {
     console.log("deleteCoach service ran")
-    return coachServices.deleteCoach(coachId)
+    return coachServices.deleteCoach(coachId, token)
 }

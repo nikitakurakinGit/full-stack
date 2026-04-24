@@ -5,15 +5,21 @@ import Form from '../components/form/coachForm';
 import * as coachServices from '../services/coachServices';
 import * as coachRepo from '../apis/coachesRepo';
 import { Modal } from "../components/layout/modal";
+import { useAuth } from '@clerk/clerk-react';
+import { useGroupContext } from "../hooks/useGroupContext";
 
 
 export default function CoachesPage() {
+    const { getToken } = useAuth()
+    const { refreshGroups } = useGroupContext()
     const [coaches, setCoaches] = useState<CoachInterface[]>([])
     const [ showForm, setShowForm ] = useState(false)
 
     useEffect(() => {
         const fetchCoaches = async () => {
-            const coaches = await coachServices.fetchCoaches()
+            const token = await getToken()
+            if(!token) return 
+            const coaches = await coachServices.fetchCoaches(token)
              setCoaches([...coaches])
         }
         fetchCoaches();
@@ -26,10 +32,10 @@ export default function CoachesPage() {
 
     const onRemoveCoach = async (coach: CoachInterface) => {
         try{
-            console.log("remove coach ran from coaches page")
-            
-            await coachRepo.deleteCoach(coach.id);
-
+            const token = await getToken()
+            if(!token) return
+            await coachRepo.deleteCoach(coach.id, token);
+            refreshGroups();
             setCoaches(prev => prev.filter(c => c.id !== coach.id))
 
         } catch (error) {
