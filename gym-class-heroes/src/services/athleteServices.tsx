@@ -2,8 +2,8 @@ import * as AthleteRepo from "../apis/athleteRepository";
 import type { AthletesInterface } from "../components/interface/athletesInterface";
 
 // FETCH ATHLETES
-export async function fetchAthletes(): Promise<AthletesInterface[]> {
-  const athletes = await AthleteRepo.fetchAthletes();
+export async function fetchAthletes(token: string): Promise<AthletesInterface[]> {
+  const athletes = await AthleteRepo.fetchAthletes(token);
   return athletes;
 }
 

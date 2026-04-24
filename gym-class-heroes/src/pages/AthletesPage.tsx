@@ -29,7 +29,7 @@ export default function AthletesPage() {
       const token = await getToken()
       if (!token) return
 
-      const athletes = await athleteService.fetchAthletes();
+      const athletes = await athleteService.fetchAthletes(token);
       setAthletes([...athletes]);
     };
     fetchAthletes();
