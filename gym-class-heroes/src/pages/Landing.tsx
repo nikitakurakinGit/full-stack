@@ -11,13 +11,15 @@ export default function Landing() {
    * If user is signed in, redirects to the coaches page.
    */
 
+
+  const text: string = "GYM  CLASS  HEROS"
   return (
     <>
       <style>{`
         @keyframes slideInUp {
           from {
             opacity: 0;
-            transform: translateY(30px) scale(0.8);
+            transform: translateY(15px) scale(0.8);
           }
           to {
             opacity: 1;
@@ -35,59 +37,39 @@ export default function Landing() {
 
         .banner-letter {
           display: inline-block;
-          animation: slideInUp 0.6s ease-out forwards;
+          animation: slideInUp 1s ease-out forwards;
           margin: 0 0.05em;
         }
-
-        .banner-letter:nth-child(1) { animation-delay: 0.1s; }
-        .banner-letter:nth-child(2) { animation-delay: 0.15s; }
-        .banner-letter:nth-child(3) { animation-delay: 0.2s; }
-        .banner-letter:nth-child(4) { animation-delay: 0.25s; }
-        .banner-letter:nth-child(5) { animation-delay: 0.3s; }
-        .banner-letter:nth-child(6) { animation-delay: 0.35s; }
-        .banner-letter:nth-child(7) { animation-delay: 0.4s; }
-        .banner-letter:nth-child(8) { animation-delay: 0.45s; }
-        .banner-letter:nth-child(9) { animation-delay: 0.5s; }
-        .banner-letter:nth-child(10) { animation-delay: 0.55s; }
-        .banner-letter:nth-child(11) { animation-delay: 0.6s; }
-        .banner-letter:nth-child(12) { animation-delay: 0.65s; }
-        .banner-letter:nth-child(13) { animation-delay: 0.7s; }
-        .banner-letter:nth-child(14) { animation-delay: 0.75s; }
-        .banner-letter:nth-child(15) { animation-delay: 0.8s; }
-        .banner-letter:nth-child(16) { animation-delay: 0.85s; }
 
         .banner-text:hover .banner-letter {
           filter: drop-shadow(0 0 12px rgba(34, 37, 39, 0.6));
         }
       `}</style>
 
-      <div className="flex flex-col w-full px-6 py-4 mx-auto">
+      <div className="flex flex-col min-h-screen">
         <SignedOut>
-          <div className="flex flex-col justify-center items-center gap-8">
-            {/* BANNER WITH INTRO EFFECT */}
+          <div className="flex-grow flex flex-col justify-center items-center gap-8">
             <div className="flex justify-center items-center my-8">
               <h1 className="banner-text">
-                <span className="banner-letter">G</span>
-                <span className="banner-letter">Y</span>
-                <span className="banner-letter">M</span>
-                <span className="banner-letter"> </span>
-                <span className="banner-letter">C</span>
-                <span className="banner-letter">L</span>
-                <span className="banner-letter">A</span>
-                <span className="banner-letter">S</span>
-                <span className="banner-letter">S</span>
-                <span className="banner-letter"> </span>
-                <span className="banner-letter">H</span>
-                <span className="banner-letter">E</span>
-                <span className="banner-letter">R</span>
-                <span className="banner-letter">O</span>
-                <span className="banner-letter">E</span>
-                <span className="banner-letter">S</span>
+                {text.split("").map((letter, i) => (
+                  <span
+                    key={i}
+                    className="banner-letter"
+                    style={{ animationDelay: `${i * 0.05}s` }}
+                  >
+                    {letter === " " ? "\u00A0" : letter}
+                  </span>
+                ))}
               </h1>
             </div>
 
             <p className="text-xl font-semibold text-gray-700">Workout Management System</p>
-            <SignInButton />
+            <SignInButton>
+              <button className="text-black border border-black rounded-md mt-5 px-3 py-2 bg-white hover:bg-gray-100
+                        transition">
+                Sign In
+              </button>
+          </SignInButton>
           </div>
         </SignedOut>
 
